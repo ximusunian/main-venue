@@ -56,23 +56,9 @@
 
       <titleLine style="margin-top: 0.733rem" title="爆款热卖前10排行榜单"></titleLine>
       <div class="rank-list">
-        <div class="first-to-five odd-item">
-          <div class="img-part">
-            <div class="img-part-box">
-              <img src="@/assets/images/img_activity_big.png" />
-              <div class="img-part-box-price">
-                <div class="img-part-box-price-left">
-                  <span>双十一抢货价</span>
-                  <span>67.00</span>
-                </div>
-                <span class="img-part-box-price-right">12月02日 24点结束</span>
-              </div>
-              
-            </div>
-          </div>
-          <div class="price-part"></div>
-        </div>
-        <div class="first-to-five even-item"></div>
+        <listItemLR :type="1" :data="{}"></listItemLR>
+        <listItemLR :type="2" :data="{}"></listItemLR>
+        <listItemTB :type="1" :tags="1" :data="{}"></listItemTB>
       </div>
     </div>
   </div>
@@ -80,11 +66,15 @@
 
 <script>
 import titleLine from "@/components/titleLine"
+import listItemLR from "@/components/listItemLR"
+import listItemTB from "@/components/listItemTB"
 import { CountDown } from "vant";
 export default {
   name: "index",
   components: {
     titleLine,
+    listItemLR,
+    listItemTB,
     [CountDown.name]: CountDown,
   },
   data() {
@@ -239,53 +229,7 @@ export default {
     }
 
     .rank-list {
-      .first-to-five {
-        width: 100%;
-        height: 5.33rem;
-        .img-part {
-          width: 5.33rem;
-          height: 100%;
-          position: relative;
-          &-box {
-            position: absolute;
-            bottom: 0;
-            height: 1.44rem;
-            img {
-              width: 100%;
-              height: 100%;
-              position: relative;
-            }
-            &-price {
-              position: absolute;
-              bottom: 0;
-              display: flex;
-              height: 100%;
-              &-left {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: space-around;
-                span {
-                  color: #F9ECD2;
-                  font-size: 0.65rem;
-                }
-                span:first-child {
-                  font-size: 0.3rem;
-                }
-              }
-              &-right {
-                display: flex;
-                align-items: flex-end;
-                color: #F9ECD2;
-                font-size: 0.32rem;
-                margin-bottom: 0.2rem;
-                margin-left: 0.3rem;
-              }
-            }
-          }
-        }
-      }
+
     }
   }
 }

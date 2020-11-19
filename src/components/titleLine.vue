@@ -40,6 +40,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 0.4rem;
   img {
     width: 0.933rem;
     height: 0.653rem;
