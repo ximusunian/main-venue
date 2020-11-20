@@ -53,15 +53,15 @@ module.exports = {
   // webpack-dev-server 相关配置
   devServer: {
     open: true,
-    host: "192.168.13.3",
+    host: "192.168.0.148",
     port: 8100,
     https: false,
     hotOnly: false,
     // http 代理配置
     proxy: {
       "/huitongyi": {
-        target: 'http://120.55.95.100:8100',
-        // target: 'http://192.168.0.139:8100',
+        // target: 'http://120.55.95.100:8100',
+        target: 'http://192.168.0.140:8100',
         changeOrigin: true,
         pathRewrite: {
           "^/huitongyi": "huitongyi"

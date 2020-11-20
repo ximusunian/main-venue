@@ -10,4 +10,63 @@
       font-size: 0.693rem;
     }
   }
+  .classification {
+    .van-tabs__wrap {
+      height: auto;
+    }
+    .van-tabs__nav--card {
+      height: 1.066rem;
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      
+      
+      .van-tab {
+        color: #EB222E;
+        border: none;
+        font-size: 0.4rem;
+        border-bottom: 0.5px solid rgba($color: #000000, $alpha: 0.1);
+      }
+      .van-tab.van-tab--active {
+        color: #FFF;
+        background-image: linear-gradient(#F80A3E, #FE3E21);
+        border-bottom: none;
+      }
+    }
+    &-second {
+      .van-tabs__nav{
+        width: 100%;
+        box-sizing: border-box;
+        display: table;
+        overflow: hidden;
+        background-color: #FFF;
+        // padding: 0 0.4rem 0.38rem;
+        padding-bottom: 0.38rem;
+      }
+      .van-tab {
+        min-width: 1.813rem ;
+        height: 0.64rem;
+        color: #000000;
+        float: left;
+        text-align: center;
+        line-height: 0.64rem;
+        box-sizing: border-box;
+        font-size: 0.373rem;
+        font-weight: normal;
+        margin-top: 0.38rem;
+        margin-left: 0.4rem;
+      }
+      .van-tab.van-tab--active { 
+        color: #FFF;
+        background-color: #F82549;
+        border-radius: 0.08rem;
+      }
+      .van-tabs__line {
+        display: none;
+      }
+      .van-tabs__wrap--scrollable .van-tab {
+        padding: 0;
+      }
+    }
+  }
 }

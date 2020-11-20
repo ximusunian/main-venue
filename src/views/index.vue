@@ -4,71 +4,143 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-18 18:04:26
+ * @LastEditTime: 2020-11-20 18:46:22
 -->
 <template>
   <div id="index">
     <header>
-      <img src="@/assets/images/banner-top.png" class="header-bg" />
+      <img :src="headerImg" class="header-bg" />
       <div class="countdown-title">
         <span class="divider">——</span>
-        <p><span>距活动</span><span class="big">开始</span></p>
+        <p><span>距活动</span><span class="big">{{txt}}</span></p>
         <span class="divider">——</span>
       </div>
     </header>
     <div class="container">
-      <van-count-down :time="time">
-        <template #default="timeData">
-          <span class="block">{{ timeData.days }}</span>
-          <span class="colon">天</span>
-          <span class="block">{{ timeData.hours }}</span>
-          <span class="colon">时</span>
-          <span class="block">{{ timeData.minutes }}</span>
-          <span class="colon">分</span>
-          <span class="block">{{ timeData.seconds }}</span>
-          <span class="colon">秒</span>
-        </template>
-      </van-count-down>
+      <div class="box">
+        <van-count-down :time="time" format="DD 天 HH 时 mm 分 ss 秒">
+          <template #default="timeData">
+            <span class="lock">
+              <span class="block">{{translateTime(timeData.days, 1)}}</span>
+              <span class="block">{{translateTime(timeData.days, 2)}}</span>
+            </span>
+            <span class="colon">天</span>
+            <span class="lock">
+              <span class="block">{{translateTime(timeData.hours, 1)}}</span>
+              <span class="block">{{translateTime(timeData.hours, 2)}}</span>
+            </span>
+            <span class="colon">时</span>
+            <span class="lock">
+              <span class="block">{{translateTime(timeData.minutes, 1)}}</span>
+              <span class="block">{{translateTime(timeData.minutes, 2)}}</span>
+            </span>
+            <span class="colon">分</span>
+            <span class="lock">
+              <span class="block">{{translateTime(timeData.seconds, 1)}}</span>
+              <span class="block">{{translateTime(timeData.seconds, 2)}}</span>
+            </span>
+            <span class="colon">秒</span>
+          </template>
+        </van-count-down>
 
-      <div class="activity activity-collection">
-        <div class="activity-collection-main">
-          <img src="@/assets/images/img_good_manners.png" class="activity-collection-main-left"/>
-          <div class="activity-collection-main-right">
-            <p class="date">11月27日-11月29日</p>
-            <p class="title">百万豪礼 大馈赠</p>
-            <p class="desc">提前加入购物车</p>
-            <p class="desc">赠送意外惊喜 等你来领取</p>
-            <div class="btn">立即领取</div>
+        <div class="activity activity-collection">
+          <div class="activity-collection-main">
+            <img
+              src="@/assets/images/img_good_manners.png"
+              class="activity-collection-main-left"
+            />
+            <div class="activity-collection-main-right">
+              <p class="date">11月27日-11月29日</p>
+              <p class="title">百万豪礼 大馈赠</p>
+              <p class="desc">提前加入购物车</p>
+              <p class="desc">赠送意外惊喜 等你来领取</p>
+              <div class="btn" @click="toToast">立即领取</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="activity activity-draw">
+          <div class="activity-draw-main">
+            <div class="activity-draw-main-left">
+              <p class="title">下单参与抽奖</p>
+              <p class="desc">
+                有机会翻苹果MacBook
+                Air电脑、苹果手机、98寸液晶电视等多重好礼等你来领。
+              </p>
+              <div class="btn">立即领取</div>
+            </div>
+            <img
+              src="@/assets/images/img_gifts.png"
+              class="activity-draw-main-right"
+            />
+          </div>
+        </div>
+
+        <titleLine style="margin-top: 0.733rem" title="爆款热卖前10排行榜单"></titleLine>
+        <div class="rank-list">
+          <listItemLR v-for="(item, index) in rankList.list1" :key="index" :type="(index+1) % 2 == 0? 2: 1" :data="item"></listItemLR>
+          <div class="list-two">
+            <listItemTB v-for="(item, index) in rankList.list2" :key="index" :type="1" :tags="1" :data="item"></listItemTB>
+          </div>
+          <div class="list-three">
+            <listItemTB v-for="(item, index) in rankList.list3" :key="index" :type="2" :tags="1" :data="item"></listItemTB>
           </div>
         </div>
       </div>
 
-      <div class="activity activity-draw">
-        <div class="activity-draw-main">
-          <div class="activity-draw-main-left">
-            <p class="title">下单参与抽奖</p>
-            <p class="desc">有机会翻苹果MacBook Air电脑、苹果手机、98寸液晶电视等多重好礼等你来领。</p>
-            <div class="btn">立即领取</div>
-          </div>
-          <img src="@/assets/images/img_gifts.png" class="activity-draw-main-right"/>
-        </div>
-      </div>
+      <div class="main-box">
+        <van-tabs type="card" class="classification" sticky>
+          <van-tab v-for="(item, index) in tabList" :key="index" :title="item.name">
+            <div class="classification-second" v-if="item.list.length != 0">
+              <van-tabs scrollspy sticky offset-top="1.066rem">
+                <div v-if="item.product.length != 0">
+                  <titleLine style="margin-top: 0.533rem" :title="item.otherName"></titleLine>
+                  <div class="classification-list-two">
+                    <listItemTB v-for="(items, index) in item.newProduct.two" :key="index" :type="1" :tags="items.tags" :data="items"></listItemTB>
+                  </div>
+                  <div class="classification-list-other">
+                    <listItemTB v-for="(items, index) in item.newProduct.other" :key="index" :type="3" :tags="items.tags" :data="items"></listItemTB>
+                  </div>
+                </div>
 
-      <titleLine style="margin-top: 0.733rem" title="爆款热卖前10排行榜单"></titleLine>
-      <div class="rank-list">
-        <listItemLR :type="1" :data="{}"></listItemLR>
-        <listItemLR :type="2" :data="{}"></listItemLR>
-        <listItemTB :type="1" :tags="1" :data="{}"></listItemTB>
+                <van-tab v-for="(item1, index1) in item.list" :title="item1.name" :key="index1">
+                  <titleLine style="margin-top: 0.533rem" :title="item1.otherName"></titleLine>
+                  <div class="classification-list-two">
+                    <listItemTB v-for="(items, index) in item1.two" :key="index" :type="1" :tags="items.tags" :data="items"></listItemTB>
+                  </div>
+                  <div class="classification-list-other">
+                    <listItemTB v-for="(items, index) in item1.product" :key="index" :type="3" :tags="items.tags" :data="items"></listItemTB>
+                  </div>
+                </van-tab>
+
+              </van-tabs>
+            </div>
+            
+            <div v-else>
+              <titleLine style="margin-top: 0.533rem" :title="item.otherName"></titleLine>
+              <div class="classification-list-two">
+                <listItemTB v-for="(items, index) in item.newProduct.two" :key="index" :type="1" :tags="items.tags" :data="items"></listItemTB>
+              </div>
+              <div class="classification-list-other">
+                <listItemTB v-for="(items, index) in item.newProduct.other" :key="index" :type="3" :tags="items.tags" :data="items"></listItemTB>
+              </div>
+            </div>
+          </van-tab>
+        </van-tabs>
       </div>
+    </div>
+    <div class="operation">
+      <img src="@/assets/images/ic_refresh.png" class="refresh" @click="refresh"/>
+      <img src="@/assets/images/ic_topping.png" class="topping" @click="toTop"/>
     </div>
   </div>
 </template>
 
 <script>
-import titleLine from "@/components/titleLine"
-import listItemLR from "@/components/listItemLR"
-import listItemTB from "@/components/listItemTB"
-import { CountDown } from "vant";
+import titleLine from "@/components/titleLine";
+import listItemLR from "@/components/listItemLR";
+import listItemTB from "@/components/listItemTB";
+import { CountDown, Tab, Tabs, } from "vant";
 export default {
   name: "index",
   components: {
@@ -76,21 +148,134 @@ export default {
     listItemLR,
     listItemTB,
     [CountDown.name]: CountDown,
+    [Tab.name]: Tab,
+    [Tabs.name]: Tabs,
   },
   data() {
     return {
-      time: 60 * 60 * 24 * 2 * 1000,
+      headerImg: "",
+      txt: "开始",
+      time: 60 * 60 * 24 * 3 * 1000,
       timeData: {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
+        days: "DD",
+        hours: "HH",
+        minutes: "mm",
+        seconds: "ss",
       },
+      rankList: {
+        list1: [],
+        list2: [],
+        list3: []
+      },
+      tabList: []
     };
   },
-  created() {},
+  created() {
+    this.getWinterGrabGoods()
+    this.getWinterGrabGoodsClassify()
+  },
   mounted() {},
-  methods: {},
+  methods: {
+    getWinterGrabGoods() {
+      this.$api.getWinterGrabGoods().then(res => {
+        this.headerImg = res.data.img
+        let list = res.data.list[0].data
+        list.map((item, index) => {
+          item.rank = index + 1
+        })
+        this.rankList.list1 = list.slice(0, 5)
+        this.rankList.list2 = list.slice(5, 7)
+        this.rankList.list3 = list.slice(7, list.length+1)
+        let newDate = new Date().getTime()
+        if(newDate - res.data.middle < 0) {
+          this.txt = "开始"
+          this.time = res.data.middle - newDate
+        } else {
+          this.txt = "结束"
+          this.time = res.data.end - newDate
+        }
+      })
+    },
+
+    getWinterGrabGoodsClassify() {
+      this.$api.getWinterGrabGoodsClassify().then(res => {
+        let list = res.data.stringList
+        list.map((item, index) => {
+          item.list.map((item1, index1) => {
+            let two = []
+            item1.product.map((item2, index2) => {
+              if(item2.label == "爆款") {
+                item2.tags = 2
+              } else if(item2.label == "推荐") {
+                item2.tags = 3
+              } else {
+                item2.tags = 0
+              }
+              if(index2 < 2) {
+                two.push(item2)
+              }
+            })
+            item1.two = two
+            item1.product.splice(0, 2);
+          })
+          let twoCol = []
+          item.product.map((item3, index3) => {
+            if(item3.label == "爆款") {
+              item3.tags = 2
+            } else if(item3.label == "推荐") {
+              item3.tags = 3
+            } else {
+              item3.tags = 0
+            }
+            if(index3 < 2) {
+              twoCol.push(item3) 
+            }
+          })
+          item.newProduct = {}
+          item.newProduct.two = twoCol
+          item.product.splice(0, 2)
+          item.newProduct.other = item.product;
+        })
+        this.tabList = list
+      })
+    },
+
+    toToast() {
+      this.$toast("快去挑选货品添加到购物车，活动下单，优惠多多")
+    },
+
+    refresh() {
+      location.reload();
+    },
+    
+    toTop() {
+
+    },
+    
+    translatePrice(price, type) {
+      if(type == 1) {
+        return price.toString().split(".")[0]
+      } else {
+        return price.toString().split(".")[1]
+      }
+    },
+
+    translateTime(time, type) {
+      if(time > 10) {
+        if(type == 1) {
+          return parseInt(time / 10)
+        } else {
+          return time % 10
+        }
+      } else {
+        if(type == 1) {
+          return 0
+        } else {
+          return time
+        }
+      }
+    },
+  },
 };
 </script>
 
@@ -109,7 +294,7 @@ export default {
       font-size: 0.533rem;
       display: flex;
       align-items: center;
-      color: #FFF;
+      color: #fff;
       justify-content: center;
       p {
         margin-left: 0.2rem;
@@ -122,21 +307,34 @@ export default {
     }
   }
   .container {
-    background-image: linear-gradient(#F8395C, #F9183B);
-    padding: 0 0.32rem 0.533rem;
+    padding-bottom: 0.533rem;
+    background-image: linear-gradient(#f8395c, #f9183b);
+    .box {
+      padding: 0 0.32rem;
+    }
+
     .van-count-down {
       display: flex;
       justify-content: center;
-      color: #FFF;
+      color: #fff;
       font-size: 0.4224rem;
       margin-bottom: 0.386rem;
-      .block {
-        display: inline-block;
-        // width: 0.3696rem;
-        color: #fff;
-        // font-size: 12px;
-        text-align: center;
-        // background-color: #1B1B1B;
+      .lock {
+        .block {
+          display: inline-block;
+          width: 0.3696rem;
+          color: #fff;
+          font-size: 0.4572rem;
+          text-align: center;
+          background-color: #1B1B1B;
+          border-radius: 0.0528rem;
+        }
+        .block:first-child {
+          margin-right: 0.05rem;
+        }
+      }
+      .colon {
+        margin: 0 0.12rem;
       }
     }
 
@@ -144,14 +342,15 @@ export default {
       padding: 0.266rem;
       height: 4.746rem;
       border-radius: 0.32rem;
-      background-image: linear-gradient(to right,#ED0B38, #E5173F);
+      background-image: linear-gradient(to right, #ed0b38, #e5173f);
     }
+
     .activity-collection {
       &-main {
         display: flex;
         height: 4.746rem;
         border-radius: 0.32rem;
-        border: 1px dashed #FEF5CF;
+        border: 1px dashed #fef5cf;
         &-left {
           width: 3.64rem;
           height: 3.64rem;
@@ -164,29 +363,29 @@ export default {
           align-items: center;
           margin-left: 0.106rem;
           .date {
-            color: #FBE2AE;
+            color: #fbe2ae;
             font-size: 0.426rem;
             margin-top: 0.386rem;
           }
           .title {
-            color: #FFF;
+            color: #fff;
             font-size: 0.586rem;
             margin-top: 0.213rem;
             margin-bottom: 0.16rem;
           }
           .desc {
-            color: #FFF;
+            color: #fff;
             font-size: 0.373rem;
           }
           .btn {
             width: 2.633rem;
             height: 0.746rem;
             font-size: 0.4rem;
-            color: #EA0F3B;
+            color: #ea0f3b;
             text-align: center;
             line-height: 0.746rem;
             border-radius: 0.746rem;
-            background-image: linear-gradient(to right, #FEF6D1, #FFD08D);
+            background-image: linear-gradient(to right, #fef6d1, #ffd08d);
             margin-top: 0.32rem;
           }
         }
@@ -199,7 +398,7 @@ export default {
         &-left {
           max-width: 4.12rem;
           margin-left: 0.4rem;
-          color: #FFF;
+          color: #fff;
           .title {
             font-size: 0.586rem;
             margin-top: 0.653rem;
@@ -212,11 +411,11 @@ export default {
             width: 2.633rem;
             height: 0.746rem;
             font-size: 0.4rem;
-            color: #EA0F3B;
+            color: #ea0f3b;
             text-align: center;
             line-height: 0.746rem;
             border-radius: 0.746rem;
-            background-image: linear-gradient(to right, #FEF6D1, #FFD08D);
+            background-image: linear-gradient(to right, #fef6d1, #ffd08d);
             margin-top: 0.32rem;
           }
         }
@@ -228,8 +427,58 @@ export default {
       }
     }
 
-    .rank-list {
+    .main-box {
+      margin-top: 0.266rem;
+    }
 
+    .list-two {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .list-three {
+      display: flex;
+      .listItemTB {
+        margin-right: 0.16rem;
+      }
+    }
+
+    .list-other {
+      display: flex;
+      flex-wrap: wrap;
+      padding-left: 0.16rem;
+      .listItemTB {
+        margin-left: 0.16rem;
+      }
+    }
+
+    .classification-list-two {
+      display: flex;
+      padding: 0 0.32rem;
+      justify-content: space-between;
+    }
+    
+    .classification-list-other {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0 0.16rem;
+      .listItemTB {
+        margin-left: 0.16rem;
+      }
+    }
+  }
+  .operation {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 80%;
+    right: 0.32rem;
+    .refresh, .topping {
+      width: 0.853rem;
+      height: 0.853rem;
+    }
+    .refresh {
+      margin-bottom: 0.32rem;
     }
   }
 }

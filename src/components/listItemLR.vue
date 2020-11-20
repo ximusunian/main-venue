@@ -5,20 +5,21 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-18 18:04:26
+ * @LastEditTime: 2020-11-20 16:57:08
 -->
 <template>
   <div class="listItemLR">
     <div v-if="type == 1" class="l-img-r-price">
       <div class="img-part">
-        <img src="" />
-        <div class="rank-tag">1</div>
+        <img :src="data.pic" class="pic"/>
+        <div class="rank-tag">{{data.rank}}</div>
         <div class="img-part-box">
           <img src="@/assets/images/img_activity_big.png" />
           <div class="img-part-box-price">
             <div class="img-part-box-price-left small">
-              <span>双十一抢货价</span>
-              <span>67.00</span>
+              <span v-if="data.rank == 1">双十一抢货价</span>
+              <span v-else>活动价¥</span>
+              <span>{{data.price}}</span>
             </div>
             <span class="img-part-box-price-right">12月02日 24点结束</span>
           </div>
@@ -26,16 +27,14 @@
       </div>
       <div class="price-part">
         <div class="price-part-top">
-          <p class="price-part-top-title">
-            嘟嘟女孩68222加绒休闲时装短嘟嘟女孩68222加绒休闲时装短靴
-          </p>
+          <p class="price-part-top-title">{{data.name}}</p>
           <div class="price-part-top-tags">冬季暖心价</div>
           <div class="price-part-top-price">
             <span class="price-part-top-price-now">
               <span class="sign">¥</span>
-              <span class="num">67.00</span>
+              <span class="num">{{data.price}}</span>
             </span>
-            <span class="price-part-top-price-old">¥96.50</span>
+            <span class="price-part-top-price-old">¥{{data.oriPrice}}</span>
           </div>
         </div>
         <div class="price-part-footer">
@@ -48,15 +47,15 @@
       <div class="price-part">
         <div class="price-part-top">
           <p class="price-part-top-title">
-            嘟嘟女孩68222加绒休闲时装短嘟嘟女孩68222加绒休闲时装短靴
+            {{data.name}}
           </p>
           <div class="price-part-top-tags">冬季暖心价</div>
           <div class="price-part-top-price">
             <span class="price-part-top-price-now">
               <span class="sign">¥</span>
-              <span class="num">67.00</span>
+              <span class="num">{{data.price}}</span>
             </span>
-            <span class="price-part-top-price-old">¥96.50</span>
+            <span class="price-part-top-price-old">¥{{data.oriPrice}}</span>
           </div>
         </div>
         <div class="price-part-footer">
@@ -65,14 +64,15 @@
         </div>
       </div>
       <div class="img-part">
-        <img src="" />
-        <div class="rank-tag">2</div>
+        <img :src="data.pic" class="pic"/>
+        <div class="rank-tag">{{data.rank}}</div>
         <div class="img-part-box">
-          <img src="@/assets/images/img_activity_big.png" />
+          <img src="@/assets/images/img_activity_big2.png" />
           <div class="img-part-box-price">
             <div class="img-part-box-price-left small">
-              <span>双十一抢货价</span>
-              <span>67.00</span>
+              <span v-if="data.rank == 1">双十一抢货价</span>
+              <span v-else>活动价¥</span>
+              <span>{{data.price}}</span>
             </div>
             <span class="img-part-box-price-right">12月02日 24点结束</span>
           </div>
@@ -118,6 +118,11 @@ export default {
       width: 5.33rem;
       height: 100%;
       position: relative;
+      .pic {
+        width: 5.33rem;
+        height: 5.33rem;
+        border-radius: 0.213rem 0 0 0.213rem;
+      }
       .rank-tag {
         position: absolute;
         top: 0.28rem;
@@ -171,7 +176,7 @@ export default {
             color: #F9ECD2;
             font-size: 0.32rem;
             margin-bottom: 0.18rem;
-            margin-left: 0.15rem;
+            margin-left: 0.3rem;
           }
         }
       }
@@ -262,6 +267,11 @@ export default {
       width: 5.33rem;
       height: 100%;
       position: relative;
+      .pic {
+        width: 5.33rem;
+        height: 5.33rem;
+        border-radius: 0 0.213rem 0.213rem 0;
+      }
       .rank-tag {
         position: absolute;
         top: 0.28rem;
@@ -315,7 +325,7 @@ export default {
             color: #F9ECD2;
             font-size: 0.32rem;
             margin-bottom: 0.18rem;
-            margin-left: 0.15rem;
+            margin-left: 0.35rem;
           }
         }
       }

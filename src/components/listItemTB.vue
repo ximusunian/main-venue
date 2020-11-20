@@ -1,54 +1,83 @@
 <!--
  * @Name: 列表项
- * @Description: type: 1 (一行两图宽), 2 (一行三图宽); tags: 0 (无标签), 1 (排名标签), 2 (爆款标签), 3 (推荐标签)
+ * @Description: type: 1 (一行两图宽), 2 (一行三图宽), 3 (一行三图宽2); tags: 0 (无标签), 1 (排名标签), 2 (爆款标签), 3 (推荐标签)
  * @version: 1.0
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-18 18:04:26
+ * @LastEditTime: 2020-11-20 16:30:14
 -->
 <template>
   <div class="listItemTB">
-    <div class="two-col">
+    <div v-if="type == 1" class="two-col">
       <div class="two-col-top">
-        <img src="" />
-        <div class="two-col-top-tag">6</div>
+        <img :src="data.pic" class="pic"/>
+        <div v-if="tags == 1" class="two-col-top-tag">{{data.rank}}</div>
+        <div v-if="tags == 2" class="two-col-top-tag1"></div>
+        <div v-if="tags == 3" class="two-col-top-tag2"></div>
         <div class="slogan-box">
           <div class="slogan-box-l">
             <span class="title">活动价¥</span>
-            <span class="num">67.00</span>
+            <span class="num">{{data.price}}</span>
           </div>
           <div class="slogan-box-r">12月02日 24点结束</div>
         </div>
       </div>
       <div class="two-col-bottom">
         <p class="two-col-bottom-title">
-          <span>杰尼波比9118超纤维特级材料加绒篮球鞋百百白哈哈哈</span>
+          <span>{{data.name}}</span>
         </p>
         <div class="two-col-bottom-btn">立即抢购</div>
       </div>
     </div>
-    <div class="three-col">
+    <div v-if="type == 2" class="three-col">
       <div class="three-col-top">
-        <img src="" />
-        <div class="three-col-top-tag">10</div>
+        <img :src="data.pic" class="pic"/>
+        <div class="three-col-top-tag">{{data.rank}}</div>
         <div class="slogan-box">
           <div class="slogan-box-l">
             <span class="title">活动价¥</span>
-            <span class="num">67.00</span>
+            <span class="num">{{data.price}}</span>
           </div>
           <div class="slogan-box-r">12月02日24点结束</div>
         </div>
       </div>
       <div class="three-col-bottom">
         <div class="three-col-bottom-box">
-          <span class="three-col-bottom-box-title">杰尼波比9118超纤维特级材料加绒篮球鞋百百白哈哈哈</span>
+          <span class="three-col-bottom-box-title">{{data.name}}</span>
           <div class="three-col-bottom-box-price">
-            <span class="new"><span class="sign">¥</span><span class="num">67.00</span></span>
-            <span class="old">¥96.50</span>
+            <span class="new"><span class="sign">¥</span><span class="num">{{data.price}}</span></span>
+            <span class="old">¥{{data.oriPrice}}</span>
           </div>
         </div>
         <div class="three-col-bottom-btn">立即抢购</div>
+      </div>
+    </div>
+    <div v-if="type == 3" class="three-col-small">
+      <div class="three-col-small-top">
+        <img :src="data.pic" class="pic" />
+        <div v-if="tags == 2" class="three-col-small-top-tag1"></div>
+        <div v-if="tags == 3" class="three-col-small-top-tag2"></div>
+        <div class="slogan-box">
+          <div class="slogan-box-l">
+            <span class="title">活动价¥</span>
+            <span class="num">{{data.price}}</span>
+          </div>
+          <div class="slogan-box-r">
+            <span>12月02日</span>
+            <span>24点结束</span>
+          </div>
+        </div>
+      </div>
+      <div class="three-col-small-bottom">
+        <div class="three-col-small-bottom-box">
+          <span class="three-col-small-bottom-box-title">{{data.name}}</span>
+          <div class="three-col-small-bottom-box-price">
+            <span class="new"><span class="sign">¥</span><span class="num">{{data.price}}</span></span>
+            <span class="old">¥{{data.oriPrice}}</span>
+          </div>
+        </div>
+        <div class="three-col-small-bottom-btn">立即抢购</div>
       </div>
     </div>
   </div>
@@ -90,13 +119,22 @@ export default {
 
 <style lang="scss" scoped>
   .listItemTB {
+    margin-top: 0.226rem;
     .two-col {
       width: 4.6rem;
       &-top {
         width: 100%;
         height: 4.6rem;
         position: relative;
+        .pic {
+          width: 4.6rem;
+          height: 4.6rem;
+          border-radius: 0.2133rem 0.2133rem 0 0;
+        }
         &-tag {
+          position: absolute;
+          top: 0.173rem;
+          left: 0.16rem;
           width: 0.72rem;
           height: 0.72rem;
           font-size: 0.4752rem;
@@ -104,6 +142,26 @@ export default {
           text-align: center;
           line-height: 0.72rem;
           background-image: url("../assets/images/img_recommend.png");
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+        }
+        &-tag1 {
+          position: absolute;
+          top: 0.173rem;
+          left: 0.16rem;
+          width: 1.106rem;
+          height: 1.106rem;
+          background-image: url("../assets/images/img_hugely_popular.png");
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+        }
+        &-tag2 {
+          position: absolute;
+          top: 0.173rem;
+          left: 0.16rem;
+          width: 1.2rem;
+          height: 0.76rem;
+          background-image: url("../assets/images/img_activity_recommendation.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
         }
@@ -181,9 +239,17 @@ export default {
       width: 3.02rem;
       &-top {
         width: 100%;
-        height: 4.6rem;
+        height: 3.02rem;
         position: relative;
+        .pic {
+          width: 3.02rem;
+          height: 3.02rem;
+          border-radius: 0.2133rem 0.2133rem 0 0;
+        }
         &-tag {
+          position: absolute;
+          top: 0.16rem;
+          left: 0.16rem;
           width: 0.62rem;
           height: 0.62rem;
           font-size: 0.4rem;
@@ -209,7 +275,7 @@ export default {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0 0.06rem;
+            padding: 0 0.03rem;
             .title {
               font-size: 0.266rem;
               margin-top: 0.06rem;
@@ -224,6 +290,125 @@ export default {
             justify-content: flex-end;
             font-size: 0.2rem;
             margin-bottom: 0.02rem;
+          }
+        }
+      }
+      &-bottom {
+        width: 100%;
+        &-box {
+          background-color: #FFF;
+          padding: 0.133rem 0.266rem;
+          &-title {
+            color: #333333;
+            font-size: 0.35rem;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            /* autoprefixer: ignore next */
+            -webkit-box-orient: vertical;
+          }
+          &-price {
+            margin-top: -0.3rem;
+            .new {
+              height: 100%;
+              color: #F72A4E;
+              .sign {
+                font-size: 0.3rem;
+              }
+              .num {
+                font-size: 0.45rem;
+              }
+            }
+            .old {
+              font-size: 0.346rem;
+              color: rgba($color: #000000, $alpha: 0.3);
+              margin-left: 0.05rem;
+              text-decoration: line-through;
+            }
+          }
+        }
+        &-btn {
+          width: 100%;
+          height: 0.693rem;
+          color: #FFF;
+          font-size: 0.4rem;
+          text-align: center;
+          line-height: 0.693rem;
+          background-color: #FE3E21;
+          box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          border: 0.5px solid #FFCC7F;
+          border-top: 0;
+          border-radius: 0 0 0.2133rem 0.2133rem;
+        }
+      }
+    }
+    .three-col-small {
+      width: 3.02rem;
+      &-top {
+        width: 100%;
+        height: 3.02rem;
+        position: relative;
+        .pic {
+          width: 3.02rem;
+          height: 3.02rem;
+          border-radius: 0.2133rem 0.2133rem 0 0;
+        }
+        &-tag1 {
+          position: absolute;
+          top: 0.16rem;
+          left: 0.16rem;
+          width: 0.88rem;
+          height: 0.88rem;
+          background-image: url("../assets/images/img_hugely_popular_small.png");
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+        }
+        &-tag2 {
+          position: absolute;
+          top: 0.16rem;
+          left: 0.16rem;
+          width: 0.96rem;
+          height: 0.6rem;
+          background-image: url("../assets/images/img_activity_recommendation_small.png");
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+        }
+        .slogan-box {
+          width: 100%;
+          height: 1.253rem;
+          position: absolute;
+          bottom: 0;
+          display: flex;
+          background-image: url("../assets/images/img_activity_min.png");
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+          color: #F9ECD2;
+          &-l {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0.12rem;
+            .title {
+              font-size: 0.266rem;
+              margin-top: 0.06rem;
+            }
+            .num {
+              font-size: 0.426rem;
+            }
+          }
+          &-r {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            font-size: 0.2rem;
+            margin-bottom: 0.02rem;
+            margin-left: 0.43rem;
           }
         }
       }
