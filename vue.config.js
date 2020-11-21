@@ -60,8 +60,8 @@ module.exports = {
     // http 代理配置
     proxy: {
       "/huitongyi": {
-        // target: 'http://120.55.95.100:8100',
-        target: 'http://192.168.0.140:8100',
+        target: 'http://120.55.95.100:8100',
+        // target: 'http://192.168.0.131:8100',
         changeOrigin: true,
         pathRewrite: {
           "^/huitongyi": "huitongyi"

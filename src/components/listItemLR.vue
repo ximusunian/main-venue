@@ -5,10 +5,10 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-20 16:57:08
+ * @LastEditTime: 2020-11-21 16:08:33
 -->
 <template>
-  <div class="listItemLR">
+  <div class="listItemLR" @click="goProductDetail(data.productCode)">
     <div v-if="type == 1" class="l-img-r-price">
       <div class="img-part">
         <img :src="data.pic" class="pic"/>
@@ -17,11 +17,14 @@
           <img src="@/assets/images/img_activity_big.png" />
           <div class="img-part-box-price">
             <div class="img-part-box-price-left small">
-              <span v-if="data.rank == 1">双十一抢货价</span>
-              <span v-else>活动价¥</span>
-              <span>{{data.price}}</span>
+              <span class="first" v-if="data.rank == 1">双十一抢货价</span>
+              <span class="first" v-else>活动价¥</span>
+              <span>
+                <span>{{translatePrice(data.price, 1)}}</span>
+                <span class="normal1">.{{translatePrice(data.price, 2)}}</span>
+              </span>
             </div>
-            <span class="img-part-box-price-right">12月02日 24点结束</span>
+            <span class="img-part-box-price-right">{{timeTxt}}</span>
           </div>
         </div>
       </div>
@@ -32,7 +35,10 @@
           <div class="price-part-top-price">
             <span class="price-part-top-price-now">
               <span class="sign">¥</span>
-              <span class="num">{{data.price}}</span>
+              <span class="num">
+                <span>{{translatePrice(data.price, 1)}}</span>
+                <span class="sign">.{{translatePrice(data.price, 2)}}</span>
+              </span>
             </span>
             <span class="price-part-top-price-old">¥{{data.oriPrice}}</span>
           </div>
@@ -53,7 +59,10 @@
           <div class="price-part-top-price">
             <span class="price-part-top-price-now">
               <span class="sign">¥</span>
-              <span class="num">{{data.price}}</span>
+              <span class="num">
+                <span>{{translatePrice(data.price, 1)}}</span>
+                <span class="sign">.{{translatePrice(data.price, 2)}}</span>
+              </span>
             </span>
             <span class="price-part-top-price-old">¥{{data.oriPrice}}</span>
           </div>
@@ -70,11 +79,14 @@
           <img src="@/assets/images/img_activity_big2.png" />
           <div class="img-part-box-price">
             <div class="img-part-box-price-left small">
-              <span v-if="data.rank == 1">双十一抢货价</span>
-              <span v-else>活动价¥</span>
-              <span>{{data.price}}</span>
+              <span class="first" v-if="data.rank == 1">双十一抢货价</span>
+              <span class="first" v-else>活动价¥</span>
+              <span>
+                <span>{{translatePrice(data.price, 1)}}</span>
+                <span class="normal1">.{{translatePrice(data.price, 2)}}</span>
+              </span>
             </div>
-            <span class="img-part-box-price-right">12月02日 24点结束</span>
+            <span class="img-part-box-price-right">{{timeTxt}}</span>
           </div>
         </div>
       </div>
@@ -96,14 +108,69 @@ export default {
       type: Object,
       default: {},
       required: true
-    }
+    },
+    timeTxt: {
+      type: String,
+      default: "",
+      required: true
+    },
   },
   data() {
     return {};
   },
   created() {},
   mounted() {},
-  methods: {},
+  methods: {
+    // 去详情
+    goProductDetail(prodCode) {
+      let ua = navigator.userAgent.toLowerCase();
+      if (ua.match(/MicroMessenger/i) == "micromessenger") {
+        //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）
+        wx.miniProgram.getEnv((res) => {
+          this.weChat = true;
+          if (res.miniprogram) {
+            wx.miniProgram.navigateTo({
+              url: `/pages/goods_details/index?prodCode=${prodCode}&&classifyId=-1`,
+            });
+          } else {
+            alert("不在小程序里");
+          }
+        });
+      } else {
+        let u = navigator.userAgent;
+        let isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
+        let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isIOS) {
+          window.webkit.messageHandlers.goDetail.postMessage({
+            prodCode: prodCode, //vue给iOS传值
+          });
+        }
+        if (isAndroid) {
+          let strParameter = JSON.stringify({
+            prodCode: prodCode,
+          });
+          window.goDetail.OnClick(strParameter);
+        }
+      }
+      /**********/
+    },
+
+    /**
+     * @name: translatePrice
+     * @msg: 价格处理函数
+     * @Author: ximusunian
+     * @param {Number} price 价格
+     * @param {Number} type  处理类型: 1: 裁剪整数部分、2: 裁剪小数部分
+     * @return {Number}
+     */    
+    translatePrice(price, type) {
+      if(type == 1) {
+        return price.toString().split(".")[0]
+      } else {
+        return price.toString().split(".")[1]
+      }
+    },
+  },
 };
 </script>
 
@@ -153,35 +220,34 @@ export default {
           width: 100%;
           height: 100%;
           &-left {
+            width: 40%;
             height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0 0.25rem;
             span {
               color: #F9ECD2;
               font-size: 0.65rem;
             }
-            span:first-child {
+            span.first {
               font-size: 0.3rem;
             }
           }
-          .small {
-            padding: 0 0.1rem;
-          }
           &-right {
+            width: 60%;
             display: flex;
+            justify-content: center;
             align-items: flex-end;
             color: #F9ECD2;
             font-size: 0.32rem;
             margin-bottom: 0.18rem;
-            margin-left: 0.3rem;
           }
         }
       }
     }
     .price-part {
+      width: 4.026rem;
       max-width: 4.026rem;
       height: 100%;
       margin-left: -1px;
@@ -302,35 +368,34 @@ export default {
           width: 100%;
           height: 100%;
           &-left {
+            width: 40%;
             height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0 0.25rem;
             span {
               color: #F9ECD2;
               font-size: 0.65rem;
             }
-            span:first-child {
+            span.first {
               font-size: 0.3rem;
             }
           }
-          .small {
-            padding: 0 0.1rem;
-          }
           &-right {
+            width: 60%;
             display: flex;
+            justify-content: center;
             align-items: flex-end;
             color: #F9ECD2;
             font-size: 0.32rem;
             margin-bottom: 0.18rem;
-            margin-left: 0.35rem;
           }
         }
       }
     }
     .price-part {
+      width: 4.026rem;
       max-width: 4.026rem;
       height: 100%;
       margin-left: -1px;
@@ -406,6 +471,9 @@ export default {
         }
       }
     }
+  }
+  .normal1 {
+    font-size: 0.433rem!important;
   }
 }
 </style>

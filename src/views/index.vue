@@ -4,7 +4,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-20 18:46:22
+ * @LastEditTime: 2020-11-21 16:35:19
 -->
 <template>
   <div id="index">
@@ -67,7 +67,7 @@
                 有机会翻苹果MacBook
                 Air电脑、苹果手机、98寸液晶电视等多重好礼等你来领。
               </p>
-              <div class="btn">立即领取</div>
+              <div class="btn" @click="toActivity">立即领取</div>
             </div>
             <img
               src="@/assets/images/img_gifts.png"
@@ -78,12 +78,12 @@
 
         <titleLine style="margin-top: 0.733rem" title="爆款热卖前10排行榜单"></titleLine>
         <div class="rank-list">
-          <listItemLR v-for="(item, index) in rankList.list1" :key="index" :type="(index+1) % 2 == 0? 2: 1" :data="item"></listItemLR>
+          <listItemLR v-for="(item, index) in rankList.list1" :key="index" :type="(index+1) % 2 == 0? 2: 1" :data="item" :timeTxt="timeTxt"></listItemLR>
           <div class="list-two">
-            <listItemTB v-for="(item, index) in rankList.list2" :key="index" :type="1" :tags="1" :data="item"></listItemTB>
+            <listItemTB v-for="(item, index) in rankList.list2" :key="index" :type="1" :tags="1" :data="item" :timeTxt="timeTxt"></listItemTB>
           </div>
           <div class="list-three">
-            <listItemTB v-for="(item, index) in rankList.list3" :key="index" :type="2" :tags="1" :data="item"></listItemTB>
+            <listItemTB v-for="(item, index) in rankList.list3" :key="index" :type="2" :tags="1" :data="item" :timeTxt="timeTxt"></listItemTB>
           </div>
         </div>
       </div>
@@ -96,20 +96,20 @@
                 <div v-if="item.product.length != 0">
                   <titleLine style="margin-top: 0.533rem" :title="item.otherName"></titleLine>
                   <div class="classification-list-two">
-                    <listItemTB v-for="(items, index) in item.newProduct.two" :key="index" :type="1" :tags="items.tags" :data="items"></listItemTB>
+                    <listItemTB v-for="(items, index) in item.newProduct.two" :key="index" :type="1" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
                   </div>
                   <div class="classification-list-other">
-                    <listItemTB v-for="(items, index) in item.newProduct.other" :key="index" :type="3" :tags="items.tags" :data="items"></listItemTB>
+                    <listItemTB v-for="(items, index) in item.newProduct.other" :key="index" :type="3" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
                   </div>
                 </div>
 
                 <van-tab v-for="(item1, index1) in item.list" :title="item1.name" :key="index1">
                   <titleLine style="margin-top: 0.533rem" :title="item1.otherName"></titleLine>
                   <div class="classification-list-two">
-                    <listItemTB v-for="(items, index) in item1.two" :key="index" :type="1" :tags="items.tags" :data="items"></listItemTB>
+                    <listItemTB v-for="(items, index) in item1.two" :key="index" :type="1" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
                   </div>
                   <div class="classification-list-other">
-                    <listItemTB v-for="(items, index) in item1.product" :key="index" :type="3" :tags="items.tags" :data="items"></listItemTB>
+                    <listItemTB v-for="(items, index) in item1.product" :key="index" :type="3" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
                   </div>
                 </van-tab>
 
@@ -119,10 +119,10 @@
             <div v-else>
               <titleLine style="margin-top: 0.533rem" :title="item.otherName"></titleLine>
               <div class="classification-list-two">
-                <listItemTB v-for="(items, index) in item.newProduct.two" :key="index" :type="1" :tags="items.tags" :data="items"></listItemTB>
+                <listItemTB v-for="(items, index) in item.newProduct.two" :key="index" :type="1" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
               </div>
               <div class="classification-list-other">
-                <listItemTB v-for="(items, index) in item.newProduct.other" :key="index" :type="3" :tags="items.tags" :data="items"></listItemTB>
+                <listItemTB v-for="(items, index) in item.newProduct.other" :key="index" :type="3" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
               </div>
             </div>
           </van-tab>
@@ -154,6 +154,7 @@ export default {
   data() {
     return {
       headerImg: "",
+      url: "",
       txt: "开始",
       time: 60 * 60 * 24 * 3 * 1000,
       timeData: {
@@ -167,15 +168,19 @@ export default {
         list2: [],
         list3: []
       },
-      tabList: []
+      timeTxt: "",
+      tabList: [],
+      token: ""
     };
   },
   created() {
+    this.token = this.$route.query.token
     this.getWinterGrabGoods()
     this.getWinterGrabGoodsClassify()
   },
   mounted() {},
   methods: {
+    // 获取推荐商品信息
     getWinterGrabGoods() {
       this.$api.getWinterGrabGoods().then(res => {
         this.headerImg = res.data.img
@@ -186,17 +191,21 @@ export default {
         this.rankList.list1 = list.slice(0, 5)
         this.rankList.list2 = list.slice(5, 7)
         this.rankList.list3 = list.slice(7, list.length+1)
+        this.url = res.data.url
         let newDate = new Date().getTime()
         if(newDate - res.data.middle < 0) {
           this.txt = "开始"
           this.time = res.data.middle - newDate
+          this.timeTxt = this.format(res.data.middle, "m月d日 H时") + "开始";
         } else {
           this.txt = "结束"
           this.time = res.data.end - newDate
+          this.timeTxt = this.format(res.data.end, "m月d日 H时") + "结束";
         }
       })
     },
 
+    // 获取分类商品信息
     getWinterGrabGoodsClassify() {
       this.$api.getWinterGrabGoodsClassify().then(res => {
         let list = res.data.stringList
@@ -240,28 +249,42 @@ export default {
       })
     },
 
+    // 点击百万豪礼弹框
     toToast() {
       this.$toast("快去挑选货品添加到购物车，活动下单，优惠多多")
     },
 
+    toActivity() {
+      window.location = `${this.url}?token=${this.token}`
+    },
+
+    // 刷新
     refresh() {
       location.reload();
     },
     
+    // 返回顶部
     toTop() {
-
+      var timer = setInterval(function(){
+        let osTop = document.documentElement.scrollTop || document.body.scrollTop;
+        let ispeed = Math.floor(-osTop / 5); 
+        document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
+        if(osTop === 0){
+          clearInterval(timer);
+        }
+      },30)
     },
-    
-    translatePrice(price, type) {
-      if(type == 1) {
-        return price.toString().split(".")[0]
-      } else {
-        return price.toString().split(".")[1]
-      }
-    },
 
+    /**
+     * @name: translateTime
+     * @msg: 时间处理函数
+     * @Author: ximusunian
+     * @param {Number} time 时间
+     * @param {Number} type 处理类型: 1: 取十位上的数、2: 取个位上的数
+     * @return {Number}
+     */
     translateTime(time, type) {
-      if(time > 10) {
+      if(time >= 10) {
         if(type == 1) {
           return parseInt(time / 10)
         } else {
@@ -274,6 +297,46 @@ export default {
           return time
         }
       }
+    },
+
+    format(timestamp, formats) {
+      // formats格式包括
+      // 1. Y-m-d
+      // 2. Y-m-d H:i:s
+      // 3. Y年m月d日
+      // 4. Y年m月d日 H时i分
+      formats = formats || "Y-m-d";
+
+      var zero = function (value, m) {
+        if (m) {
+          return value;
+        }
+        if (value < 10) {
+          return "0" + value;
+        }
+        return value;
+      };
+
+      var myDate = timestamp ? new Date(timestamp) : new Date();
+
+      var year = myDate.getFullYear();
+      var month = zero(myDate.getMonth() + 1, 1);
+      var day = zero(myDate.getDate());
+
+      var hour = zero(myDate.getHours());
+      var minite = zero(myDate.getMinutes());
+      var second = zero(myDate.getSeconds());
+
+      return formats.replace(/Y|m|d|H|i|s/gi, function (matches) {
+        return {
+          Y: year,
+          m: month,
+          d: day,
+          H: hour,
+          i: minite,
+          s: second,
+        }[matches];
+      });
     },
   },
 };

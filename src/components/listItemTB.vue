@@ -5,22 +5,25 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-20 16:30:14
+ * @LastEditTime: 2020-11-21 18:19:39
 -->
 <template>
-  <div class="listItemTB">
+  <div class="listItemTB" @click="goProductDetail(data.productCode)">
     <div v-if="type == 1" class="two-col">
       <div class="two-col-top">
         <img :src="data.pic" class="pic"/>
         <div v-if="tags == 1" class="two-col-top-tag">{{data.rank}}</div>
         <div v-if="tags == 2" class="two-col-top-tag1"></div>
         <div v-if="tags == 3" class="two-col-top-tag2"></div>
-        <div class="slogan-box">
+        <div class="slogan-box" v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
           <div class="slogan-box-l">
-            <span class="title">活动价¥</span>
-            <span class="num">{{data.price}}</span>
+            <span class="title">{{data.theme}}</span>
+            <span class="num">
+              <span>{{translatePrice(data.price, 1)}}</span>
+              <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+            </span>
           </div>
-          <div class="slogan-box-r">12月02日 24点结束</div>
+          <div class="slogan-box-r">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</div>
         </div>
       </div>
       <div class="two-col-bottom">
@@ -34,19 +37,28 @@
       <div class="three-col-top">
         <img :src="data.pic" class="pic"/>
         <div class="three-col-top-tag">{{data.rank}}</div>
-        <div class="slogan-box">
+        <div class="slogan-box"  v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
           <div class="slogan-box-l">
-            <span class="title">活动价¥</span>
-            <span class="num">{{data.price}}</span>
+            <span class="title">{{data.theme}}</span>
+            <span class="num">
+              <span>{{translatePrice(data.price, 1)}}</span>
+              <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+            </span>
           </div>
-          <div class="slogan-box-r">12月02日24点结束</div>
+          <div class="slogan-box-r">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</div>
         </div>
       </div>
       <div class="three-col-bottom">
         <div class="three-col-bottom-box">
           <span class="three-col-bottom-box-title">{{data.name}}</span>
           <div class="three-col-bottom-box-price">
-            <span class="new"><span class="sign">¥</span><span class="num">{{data.price}}</span></span>
+            <span class="new">
+              <span class="sign">¥</span>
+              <span class="num">
+                <span>{{translatePrice(data.price, 1)}}</span>
+                <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+              </span>
+            </span>
             <span class="old">¥{{data.oriPrice}}</span>
           </div>
         </div>
@@ -58,14 +70,18 @@
         <img :src="data.pic" class="pic" />
         <div v-if="tags == 2" class="three-col-small-top-tag1"></div>
         <div v-if="tags == 3" class="three-col-small-top-tag2"></div>
-        <div class="slogan-box">
+        <div class="slogan-box" v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
           <div class="slogan-box-l">
-            <span class="title">活动价¥</span>
-            <span class="num">{{data.price}}</span>
+            <span class="title">{{data.theme}}</span>
+            <span class="num">
+              <span>{{translatePrice(data.price, 1)}}</span>
+              <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+            </span>
           </div>
           <div class="slogan-box-r">
-            <span>12月02日</span>
-            <span>24点结束</span>
+            {{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}
+            <!-- <span>{{substring(timeTxt, 1)}}</span>
+            <span>{{substring(timeTxt, 2)}}</span> -->
           </div>
         </div>
       </div>
@@ -73,7 +89,13 @@
         <div class="three-col-small-bottom-box">
           <span class="three-col-small-bottom-box-title">{{data.name}}</span>
           <div class="three-col-small-bottom-box-price">
-            <span class="new"><span class="sign">¥</span><span class="num">{{data.price}}</span></span>
+            <span class="new">
+              <span class="sign">¥</span>
+              <span class="num">
+                <span>{{translatePrice(data.price, 1)}}</span>
+                <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+              </span>
+            </span>
             <span class="old">¥{{data.oriPrice}}</span>
           </div>
         </div>
@@ -104,16 +126,140 @@ export default {
       type: Object,
       default: {},
       required: true
+    },
+    timeTxt: {
+      type: String,
+      default: "",
+      required: true
     }
   },
   data() {
     return {
-
+      that: this,
+      nowTime: ""
     }
   },
-  created() {},
+  created() {
+    this.nowTime = Date.parse(new Date());
+  },
   mounted() {},
-  methods: {},
+  filters: {
+    startTime(start, end, that, isOpen) {
+      let nowTime = Date.parse(new Date());
+      //判断是否开始
+      if (start - nowTime > 0) {
+        //未开始
+        return that.format(start, "m月d号 H:i") + "开始";
+      } else if (start - nowTime < 0 && end - nowTime > 0) {
+        //开始没结束
+        return that.format(end, "m月d号 H:i") + "结束";
+      } else if (nowTime - end > 0) {
+        isOpen = false;
+      }
+    },
+  },
+  methods: {
+    // 去详情
+    goProductDetail(prodCode) {
+      let ua = navigator.userAgent.toLowerCase();
+      if (ua.match(/MicroMessenger/i) == "micromessenger") {
+        //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）
+        wx.miniProgram.getEnv((res) => {
+          this.weChat = true;
+          if (res.miniprogram) {
+            wx.miniProgram.navigateTo({
+              url: `/pages/goods_details/index?prodCode=${prodCode}&&classifyId=-1`,
+            });
+          } else {
+            alert("不在小程序里");
+          }
+        });
+      } else {
+        let u = navigator.userAgent;
+        let isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1; //android终端
+        let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isIOS) {
+          window.webkit.messageHandlers.goDetail.postMessage({
+            prodCode: prodCode, //vue给iOS传值
+          });
+        }
+        if (isAndroid) {
+          let strParameter = JSON.stringify({
+            prodCode: prodCode,
+          });
+          window.goDetail.OnClick(strParameter);
+        }
+      }
+      /**********/
+    },
+
+    /**
+     * @name: translatePrice
+     * @msg: 价格处理函数
+     * @Author: ximusunian
+     * @param {Number} price 价格
+     * @param {Number} type  处理类型: 1: 裁剪整数部分、2: 裁剪小数部分
+     * @return {Number}
+     */    
+    translatePrice(price, type) {
+      if(type == 1) {
+        return price.toString().split(".")[0]
+      } else {
+        return price.toString().split(".")[1]
+      }
+    },
+
+    
+
+    substring(str, type) {
+      let idx = str.indexOf("日")
+      if(type == 1) {
+        return str.substring(0, idx+1)
+      } else {
+        return str.substring(idx+1)
+      }
+    },
+
+    format(timestamp, formats) {
+      // formats格式包括
+      // 1. Y-m-d
+      // 2. Y-m-d H:i:s
+      // 3. Y年m月d日
+      // 4. Y年m月d日 H时i分
+      formats = formats || "Y-m-d";
+
+      var zero = function (value, m) {
+        if (m) {
+          return value;
+        }
+        if (value < 10) {
+          return "0" + value;
+        }
+        return value;
+      };
+
+      var myDate = timestamp ? new Date(timestamp) : new Date();
+
+      var year = myDate.getFullYear();
+      var month = zero(myDate.getMonth() + 1, 1);
+      var day = zero(myDate.getDate());
+
+      var hour = zero(myDate.getHours());
+      var minite = zero(myDate.getMinutes());
+      var second = zero(myDate.getSeconds());
+
+      return formats.replace(/Y|m|d|H|i|s/gi, function (matches) {
+        return {
+          Y: year,
+          m: month,
+          d: day,
+          H: hour,
+          i: minite,
+          s: second,
+        }[matches];
+      });
+    },
+  },
 }
 </script>
 
@@ -176,26 +322,32 @@ export default {
           background-size: 100% 100%;
           color: #F9ECD2;
           &-l {
+            width: 31%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0 0.12rem;
+            // padding: 0 0.12rem;
             .title {
               font-size: 0.3rem;
               margin-top: 0.06rem;
             }
             .num {
               font-size: 0.48rem;
+              .sm {
+                font-size: 0.38rem;
+              }
             }
           }
           &-r {
+            width: 67%;
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: flex-end;
             font-size: 0.32rem;
             margin-bottom: 0.12rem;
-            margin-left: 0.2rem;
+            margin-left: 2%;
           }
         }
       }
@@ -271,25 +423,31 @@ export default {
           background-size: 100% 100%;
           color: #F9ECD2;
           &-l {
+            width: 38%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0 0.03rem;
             .title {
-              font-size: 0.266rem;
+              // font-size: 0.266rem;
+              font-size: 0.2rem;
               margin-top: 0.06rem;
             }
             .num {
               font-size: 0.426rem;
+              .sm {
+                font-size: 0.266rem;
+              }
             }
           }
           &-r {
+            width: 62%;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
+            align-items: center;
             font-size: 0.2rem;
-            margin-bottom: 0.02rem;
+            margin-bottom: 0.03rem;
           }
         }
       }
@@ -320,6 +478,9 @@ export default {
               }
               .num {
                 font-size: 0.45rem;
+                .sm {
+                  font-size: 0.3733rem;
+                }
               }
             }
             .old {
@@ -389,26 +550,31 @@ export default {
           background-size: 100% 100%;
           color: #F9ECD2;
           &-l {
+            width: 43%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0 0.12rem;
             .title {
-              font-size: 0.266rem;
+              // font-size: 0.266rem;
+              font-size: 0.24rem;
               margin-top: 0.06rem;
             }
             .num {
               font-size: 0.426rem;
+              .sm {
+                font-size: 0.266rem;
+              }
             }
           }
           &-r {
+            width: 57%;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
+            align-items: center;
             font-size: 0.2rem;
             margin-bottom: 0.02rem;
-            margin-left: 0.43rem;
           }
         }
       }
@@ -439,6 +605,9 @@ export default {
               }
               .num {
                 font-size: 0.45rem;
+                .sm {
+                  font-size: 0.3733rem;
+                }
               }
             }
             .old {

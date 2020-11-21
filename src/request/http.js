@@ -4,14 +4,14 @@
  * @Author: ximusunian
  * @Date: 2020-09-27 09:23:54
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-09-28 19:51:47
+ * @LastEditTime: 2020-11-21 15:31:30
  */
 import Vue from "vue";
 import axios from "axios";
 // 设置全局axios的默认值
 axios.defaults.timeout = 10000;
 axios.defaults.baseURL = '/';
-// axios.defaults.baseURL = process.env.NODE_ENV === "prod" ? "https://api.htyvip.com/huitongyi/" : "";
+// axios.defaults.baseURL = process.env.NODE_ENV === "prod" ? "https://lsp.htyvip.com/hty/" : "";
 
 // 拦截器
 axios.interceptors.request.use(
