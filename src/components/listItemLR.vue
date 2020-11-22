@@ -5,7 +5,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-21 16:08:33
+ * @LastEditTime: 2020-11-22 17:59:53
 -->
 <template>
   <div class="listItemLR" @click="goProductDetail(data.productCode)">
@@ -13,18 +13,18 @@
       <div class="img-part">
         <img :src="data.pic" class="pic"/>
         <div class="rank-tag">{{data.rank}}</div>
-        <div class="img-part-box">
+        <div class="img-part-box" v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
           <img src="@/assets/images/img_activity_big.png" />
           <div class="img-part-box-price">
             <div class="img-part-box-price-left small">
-              <span class="first" v-if="data.rank == 1">双十一抢货价</span>
-              <span class="first" v-else>活动价¥</span>
+              <span class="first">{{data.theme}}</span>
+              <!-- <span class="first" v-else>活动价¥</span> -->
               <span>
                 <span>{{translatePrice(data.price, 1)}}</span>
                 <span class="normal1">.{{translatePrice(data.price, 2)}}</span>
               </span>
             </div>
-            <span class="img-part-box-price-right">{{timeTxt}}</span>
+            <span class="img-part-box-price-right">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</span>
           </div>
         </div>
       </div>
@@ -75,18 +75,18 @@
       <div class="img-part">
         <img :src="data.pic" class="pic"/>
         <div class="rank-tag">{{data.rank}}</div>
-        <div class="img-part-box">
+        <div class="img-part-box" v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
           <img src="@/assets/images/img_activity_big2.png" />
           <div class="img-part-box-price">
             <div class="img-part-box-price-left small">
-              <span class="first" v-if="data.rank == 1">双十一抢货价</span>
-              <span class="first" v-else>活动价¥</span>
+              <span class="first">{{data.theme}}</span>
+              <!-- <span class="first" v-else>活动价¥</span> -->
               <span>
                 <span>{{translatePrice(data.price, 1)}}</span>
                 <span class="normal1">.{{translatePrice(data.price, 2)}}</span>
               </span>
             </div>
-            <span class="img-part-box-price-right">{{timeTxt}}</span>
+            <span class="img-part-box-price-right">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</span>
           </div>
         </div>
       </div>
@@ -116,10 +116,30 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      that: this,
+      nowTime: ""
+    };
   },
-  created() {},
+  created() {
+    this.nowTime = Date.parse(new Date());
+  },
   mounted() {},
+  filters: {
+    startTime(start, end, that, isOpen) {
+      let nowTime = Date.parse(new Date());
+      //判断是否开始
+      if (start - nowTime > 0) {
+        //未开始
+        return that.format(start, "m月d号 H:i") + "开始";
+      } else if (start - nowTime < 0 && end - nowTime > 0) {
+        //开始没结束
+        return that.format(end, "m月d号 H:i") + "结束";
+      } else if (nowTime - end > 0) {
+        isOpen = false;
+      }
+    },
+  },
   methods: {
     // 去详情
     goProductDetail(prodCode) {
@@ -169,6 +189,46 @@ export default {
       } else {
         return price.toString().split(".")[1]
       }
+    },
+
+    format(timestamp, formats) {
+      // formats格式包括
+      // 1. Y-m-d
+      // 2. Y-m-d H:i:s
+      // 3. Y年m月d日
+      // 4. Y年m月d日 H时i分
+      formats = formats || "Y-m-d";
+
+      var zero = function (value, m) {
+        if (m) {
+          return value;
+        }
+        if (value < 10) {
+          return "0" + value;
+        }
+        return value;
+      };
+
+      var myDate = timestamp ? new Date(timestamp) : new Date();
+
+      var year = myDate.getFullYear();
+      var month = zero(myDate.getMonth() + 1, 1);
+      var day = zero(myDate.getDate());
+
+      var hour = zero(myDate.getHours());
+      var minite = zero(myDate.getMinutes());
+      var second = zero(myDate.getSeconds());
+
+      return formats.replace(/Y|m|d|H|i|s/gi, function (matches) {
+        return {
+          Y: year,
+          m: month,
+          d: day,
+          H: hour,
+          i: minite,
+          s: second,
+        }[matches];
+      });
     },
   },
 };

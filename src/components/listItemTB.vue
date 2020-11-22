@@ -5,7 +5,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-21 18:19:39
+ * @LastEditTime: 2020-11-22 09:24:54
 -->
 <template>
   <div class="listItemTB" @click="goProductDetail(data.productCode)">
@@ -79,9 +79,9 @@
             </span>
           </div>
           <div class="slogan-box-r">
-            {{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}
-            <!-- <span>{{substring(timeTxt, 1)}}</span>
-            <span>{{substring(timeTxt, 2)}}</span> -->
+            <!-- {{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}} -->
+            <span>{{substring(translateTime(data.themeStartTime, data.themeEndTime,that,data.themeOpen), 1)}}</span>
+            <span>{{substring(translateTime(data.themeStartTime, data.themeEndTime,that,data.themeOpen), 2)}}</span>
           </div>
         </div>
       </div>
@@ -149,10 +149,10 @@ export default {
       //判断是否开始
       if (start - nowTime > 0) {
         //未开始
-        return that.format(start, "m月d号 H:i") + "开始";
+        return that.format(start, "m月d日H时") + "开始";
       } else if (start - nowTime < 0 && end - nowTime > 0) {
         //开始没结束
-        return that.format(end, "m月d号 H:i") + "结束";
+        return that.format(end, "m月d日H时") + "结束";
       } else if (nowTime - end > 0) {
         isOpen = false;
       }
@@ -209,17 +209,32 @@ export default {
       }
     },
 
-    
-
     substring(str, type) {
-      let idx = str.indexOf("日")
-      if(type == 1) {
-        return str.substring(0, idx+1)
-      } else {
-        return str.substring(idx+1)
+      if(str !== null && str !== undefined) {
+        let idx = str.indexOf("日")
+        if(type == 1) {
+          return str.substring(0, idx+1)
+        } else {
+          return str.substring(idx+1)
+        }
       }
+      
     },
 
+    translateTime(start, end, that, isOpen) {
+      let nowTime = Date.parse(new Date());
+      //判断是否开始
+      if (start - nowTime > 0) {
+        //未开始
+        return that.format(start, "m月d日H时") + "开始";
+      } else if (start - nowTime < 0 && end - nowTime > 0) {
+        //开始没结束
+        return that.format(end, "m月d日H时") + "结束";
+      } else if (nowTime - end > 0) {
+        isOpen = false;
+      }
+    },
+    
     format(timestamp, formats) {
       // formats格式包括
       // 1. Y-m-d

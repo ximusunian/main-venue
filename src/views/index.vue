@@ -4,7 +4,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-21 16:35:19
+ * @LastEditTime: 2020-11-22 18:22:42
 -->
 <template>
   <div id="index">
@@ -133,6 +133,18 @@
       <img src="@/assets/images/ic_refresh.png" class="refresh" @click="refresh"/>
       <img src="@/assets/images/ic_topping.png" class="topping" @click="toTop"/>
     </div>
+
+    <van-overlay :show="noLogin">
+      <div class="login-box">
+        <div class="top">
+          <span class="tips">您还没有登录哦～</span>
+          <img src="@/assets/images/img_not_loggedin.png" class="login-bg"/>
+          <img src="@/assets/images/btn.png" class="login-btn" @click="toLogin"/>
+        </div>
+        <img src="@/assets/images/ic_close.png" class="close-btn" @click="closeLogin"/>
+      </div>
+      
+    </van-overlay>
   </div>
 </template>
 
@@ -140,7 +152,7 @@
 import titleLine from "@/components/titleLine";
 import listItemLR from "@/components/listItemLR";
 import listItemTB from "@/components/listItemTB";
-import { CountDown, Tab, Tabs, } from "vant";
+import { CountDown, Tab, Tabs, Overlay} from "vant";
 export default {
   name: "index",
   components: {
@@ -150,9 +162,11 @@ export default {
     [CountDown.name]: CountDown,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
+    [Overlay.name]: Overlay
   },
   data() {
     return {
+      noLogin: false,
       headerImg: "",
       url: "",
       txt: "开始",
@@ -170,11 +184,18 @@ export default {
       },
       timeTxt: "",
       tabList: [],
-      token: ""
+      token: "",
+      appType: ""
     };
   },
   created() {
-    this.token = this.$route.query.token
+    let token = this.$route.query.token
+    if(token == null || token == undefined || token == "") {
+      this.noLogin = true
+    } else {
+      this.token = token
+    }
+    this.appType = this.$route.query.appType
     this.getWinterGrabGoods()
     this.getWinterGrabGoodsClassify()
   },
@@ -255,7 +276,7 @@ export default {
     },
 
     toActivity() {
-      window.location = `${this.url}?token=${this.token}`
+      window.location = `${this.url}?token=${this.token}&appType=${this.appType}`
     },
 
     // 刷新
@@ -338,6 +359,22 @@ export default {
         }[matches];
       });
     },
+
+    toLogin() {
+      if (this.$route.query.appType == "IOS") {
+        window.webkit.messageHandlers.goLoginJumpToPay.postMessage({});
+      } else {
+        window["reLoad"] = function(url) {
+          location.replace(url);
+          location.reload()
+        };
+        window.goLoginJumpToPay.OnClick("");
+      }
+    },
+    
+    closeLogin() {
+      this.noLogin = false
+    }
   },
 };
 </script>
@@ -543,6 +580,43 @@ export default {
     .refresh {
       margin-bottom: 0.32rem;
     }
+  }
+  .login-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    .top {
+      width: 64%;
+      height: 8.546rem;
+      position: relative;
+      .login-bg {
+        width: 100%;
+      }
+      .tips {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        font-size: 0.426rem;
+        color: #FFF;
+        position: absolute;
+        top: 1.706rem;
+      }
+      .login-btn {
+        position: absolute;
+        width: 77%;
+        height: 1.066rem;
+        left: 11.5%;
+        bottom: 0.5rem;
+      }
+    }
+    .close-btn {
+      width: 1.066rem;
+      height: 1.066rem;
+      margin-top: 0.5rem;
+    }
+    
   }
 }
 </style>
