@@ -5,7 +5,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-22 09:24:54
+ * @LastEditTime: 2020-11-23 18:01:42
 -->
 <template>
   <div class="listItemTB" @click="goProductDetail(data.productCode)">
@@ -13,15 +13,20 @@
       <div class="two-col-top">
         <img :src="data.pic" class="pic"/>
         <div v-if="tags == 1" class="two-col-top-tag">{{data.rank}}</div>
-        <div v-if="tags == 2" class="two-col-top-tag1"></div>
-        <div v-if="tags == 3" class="two-col-top-tag2"></div>
+        <div v-if="tags == 2" class="two-col-top-tag1">
+          <img :src="data.newTag" />
+        </div>
+        <div v-if="tags == 3 || tags == 4" class="two-col-top-tag2">
+          <img :src="data.newTag" />
+        </div>
         <div class="slogan-box" v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
           <div class="slogan-box-l">
             <span class="title">{{data.theme}}</span>
-            <span class="num">
+            <span class="num" v-if="data.price">
               <span>{{translatePrice(data.price, 1)}}</span>
-              <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+              <span class="sm">{{translatePrice(data.price, 2)}}</span>
             </span>
+            <span class="num" v-else>{{data.oriPrice}}</span>
           </div>
           <div class="slogan-box-r">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</div>
         </div>
@@ -40,10 +45,11 @@
         <div class="slogan-box"  v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
           <div class="slogan-box-l">
             <span class="title">{{data.theme}}</span>
-            <span class="num">
+            <span class="num" v-if="data.price">
               <span>{{translatePrice(data.price, 1)}}</span>
-              <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+              <span class="sm">{{translatePrice(data.price, 2)}}</span>
             </span>
+            <span class="num" v-else>{{data.oriPrice}}</span>
           </div>
           <div class="slogan-box-r">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</div>
         </div>
@@ -54,10 +60,11 @@
           <div class="three-col-bottom-box-price">
             <span class="new">
               <span class="sign">¥</span>
-              <span class="num">
+              <span class="num" v-if="data.price">
                 <span>{{translatePrice(data.price, 1)}}</span>
-                <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+                <span class="sm">{{translatePrice(data.price, 2)}}</span>
               </span>
+              <span class="num" v-else>{{data.oriPrice}}</span>
             </span>
             <span class="old">¥{{data.oriPrice}}</span>
           </div>
@@ -68,15 +75,20 @@
     <div v-if="type == 3" class="three-col-small">
       <div class="three-col-small-top">
         <img :src="data.pic" class="pic" />
-        <div v-if="tags == 2" class="three-col-small-top-tag1"></div>
-        <div v-if="tags == 3" class="three-col-small-top-tag2"></div>
+        <div v-if="tags == 2" class="three-col-small-top-tag1">
+          <img :src="data.newTag" />
+        </div>
+        <div v-if="tags == 3 || tags == 4" class="three-col-small-top-tag2">
+          <img :src="data.newTag" />
+        </div>
         <div class="slogan-box" v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
           <div class="slogan-box-l">
             <span class="title">{{data.theme}}</span>
-            <span class="num">
+            <span class="num" v-if="data.price">
               <span>{{translatePrice(data.price, 1)}}</span>
-              <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+              <span class="sm">{{translatePrice(data.price, 2)}}</span>
             </span>
+            <span class="num" v-else>{{data.oriPrice}}</span>
           </div>
           <div class="slogan-box-r">
             <!-- {{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}} -->
@@ -91,10 +103,11 @@
           <div class="three-col-small-bottom-box-price">
             <span class="new">
               <span class="sign">¥</span>
-              <span class="num">
+              <span class="num" v-if="data.price">
                 <span>{{translatePrice(data.price, 1)}}</span>
-                <span class="sm">.{{translatePrice(data.price, 2)}}</span>
+                <span class="sm">{{translatePrice(data.price, 2)}}</span>
               </span>
+              <span class="num" v-else>{{data.oriPrice}}</span>
             </span>
             <span class="old">¥{{data.oriPrice}}</span>
           </div>
@@ -202,11 +215,13 @@ export default {
      * @return {Number}
      */    
     translatePrice(price, type) {
-      if(type == 1) {
-        return price.toString().split(".")[0]
-      } else {
-        return price.toString().split(".")[1]
-      }
+      if(price != null && price != undefined && price != "") {
+        if(type == 1) {
+          return price.toString().split(".")[0]
+        } else {
+          return "." + price.toString().split(".")[1]
+        }
+      } 
     },
 
     substring(str, type) {
@@ -312,9 +327,13 @@ export default {
           left: 0.16rem;
           width: 1.106rem;
           height: 1.106rem;
-          background-image: url("../assets/images/img_hugely_popular.png");
-          background-repeat: no-repeat;
-          background-size: 100% 100%;
+          // background-image: url("../assets/images/img_hugely_popular.png");
+          // background-repeat: no-repeat;
+          // background-size: 100% 100%;
+          img {
+            width: 100%;
+            height: 100%;
+          }
         }
         &-tag2 {
           position: absolute;
@@ -322,9 +341,13 @@ export default {
           left: 0.16rem;
           width: 1.2rem;
           height: 0.76rem;
-          background-image: url("../assets/images/img_activity_recommendation.png");
-          background-repeat: no-repeat;
-          background-size: 100% 100%;
+          // background-image: url("../assets/images/img_activity_recommendation.png");
+          // background-repeat: no-repeat;
+          // background-size: 100% 100%;
+          img {
+            width: 100%;
+            height: 100%;
+          }
         }
         .slogan-box {
           width: 100%;
@@ -337,14 +360,14 @@ export default {
           background-size: 100% 100%;
           color: #F9ECD2;
           &-l {
-            width: 31%;
+            width: 34%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             // padding: 0 0.12rem;
             .title {
-              font-size: 0.3rem;
+              font-size: 0.25rem;
               margin-top: 0.06rem;
             }
             .num {
@@ -355,14 +378,14 @@ export default {
             }
           }
           &-r {
-            width: 67%;
+            width: 66%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
             font-size: 0.32rem;
             margin-bottom: 0.12rem;
-            margin-left: 2%;
+            // margin-left: 2%;
           }
         }
       }
@@ -540,9 +563,13 @@ export default {
           left: 0.16rem;
           width: 0.88rem;
           height: 0.88rem;
-          background-image: url("../assets/images/img_hugely_popular_small.png");
-          background-repeat: no-repeat;
-          background-size: 100% 100%;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          // background-image: url("../assets/images/img_hugely_popular_small.png");
+          // background-repeat: no-repeat;
+          // background-size: 100% 100%;
         }
         &-tag2 {
           position: absolute;
@@ -550,9 +577,13 @@ export default {
           left: 0.16rem;
           width: 0.96rem;
           height: 0.6rem;
-          background-image: url("../assets/images/img_activity_recommendation_small.png");
-          background-repeat: no-repeat;
-          background-size: 100% 100%;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          // background-image: url("../assets/images/img_activity_recommendation_small.png");
+          // background-repeat: no-repeat;
+          // background-size: 100% 100%;
         }
         .slogan-box {
           width: 100%;

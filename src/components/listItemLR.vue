@@ -5,7 +5,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-22 17:59:53
+ * @LastEditTime: 2020-11-23 17:59:14
 -->
 <template>
   <div class="listItemLR" @click="goProductDetail(data.productCode)">
@@ -19,10 +19,11 @@
             <div class="img-part-box-price-left small">
               <span class="first">{{data.theme}}</span>
               <!-- <span class="first" v-else>活动价¥</span> -->
-              <span>
+              <span v-if="data.price">
                 <span>{{translatePrice(data.price, 1)}}</span>
-                <span class="normal1">.{{translatePrice(data.price, 2)}}</span>
+                <span class="normal1">{{translatePrice(data.price, 2)}}</span>
               </span>
+              <span v-else>{{data.oriPrice}}</span>
             </div>
             <span class="img-part-box-price-right">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</span>
           </div>
@@ -35,10 +36,11 @@
           <div class="price-part-top-price">
             <span class="price-part-top-price-now">
               <span class="sign">¥</span>
-              <span class="num">
+              <span class="num" v-if="data.price">
                 <span>{{translatePrice(data.price, 1)}}</span>
-                <span class="sign">.{{translatePrice(data.price, 2)}}</span>
+                <span class="sign">{{translatePrice(data.price, 2)}}</span>
               </span>
+              <span class="num" v-else>{{data.oriPrice}}</span>
             </span>
             <span class="price-part-top-price-old">¥{{data.oriPrice}}</span>
           </div>
@@ -59,10 +61,11 @@
           <div class="price-part-top-price">
             <span class="price-part-top-price-now">
               <span class="sign">¥</span>
-              <span class="num">
+              <span class="num" v-if="data.price">
                 <span>{{translatePrice(data.price, 1)}}</span>
-                <span class="sign">.{{translatePrice(data.price, 2)}}</span>
+                <span class="sign">{{translatePrice(data.price, 2)}}</span>
               </span>
+              <span class="num" v-else>{{data.oriPrice}}</span>
             </span>
             <span class="price-part-top-price-old">¥{{data.oriPrice}}</span>
           </div>
@@ -81,10 +84,11 @@
             <div class="img-part-box-price-left small">
               <span class="first">{{data.theme}}</span>
               <!-- <span class="first" v-else>活动价¥</span> -->
-              <span>
+              <span v-if="data.price">
                 <span>{{translatePrice(data.price, 1)}}</span>
-                <span class="normal1">.{{translatePrice(data.price, 2)}}</span>
+                <span class="normal1">{{translatePrice(data.price, 2)}}</span>
               </span>
+              <span v-else>{{data.oriPrice}}</span>
             </div>
             <span class="img-part-box-price-right">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</span>
           </div>
@@ -184,11 +188,13 @@ export default {
      * @return {Number}
      */    
     translatePrice(price, type) {
-      if(type == 1) {
-        return price.toString().split(".")[0]
-      } else {
-        return price.toString().split(".")[1]
-      }
+      if(price != null && price != undefined && price != "") {
+        if(type == 1) {
+          return price.toString().split(".")[0]
+        } else {
+          return "." + price.toString().split(".")[1]
+        }
+      } 
     },
 
     format(timestamp, formats) {

@@ -4,7 +4,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-22 18:22:42
+ * @LastEditTime: 2020-11-23 16:52:17
 -->
 <template>
   <div id="index">
@@ -43,10 +43,10 @@
           </template>
         </van-count-down>
 
-        <div class="activity activity-collection">
+        <div class="activity activity-collection" v-show="!isStart">
           <div class="activity-collection-main">
             <img
-              src="@/assets/images/img_good_manners.png"
+              src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/app/562c44e3688c4d3eafbca89f043e38cb.png"
               class="activity-collection-main-left"
             />
             <div class="activity-collection-main-right">
@@ -70,7 +70,7 @@
               <div class="btn" @click="toActivity">立即领取</div>
             </div>
             <img
-              src="@/assets/images/img_gifts.png"
+              src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/app/09c8ca9275024136b051ef543aaba0ef.png"
               class="activity-draw-main-right"
             />
           </div>
@@ -92,7 +92,7 @@
         <van-tabs type="card" class="classification" sticky>
           <van-tab v-for="(item, index) in tabList" :key="index" :title="item.name">
             <div class="classification-second" v-if="item.list.length != 0">
-              <van-tabs scrollspy sticky offset-top="1.066rem">
+              <van-tabs scrollspy sticky offset-top="40px">
                 <div v-if="item.product.length != 0">
                   <titleLine style="margin-top: 0.533rem" :title="item.otherName"></titleLine>
                   <div class="classification-list-two">
@@ -138,12 +138,11 @@
       <div class="login-box">
         <div class="top">
           <span class="tips">您还没有登录哦～</span>
-          <img src="@/assets/images/img_not_loggedin.png" class="login-bg"/>
+          <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/app/8aacb6195603490da4242ae73662dcd7.png" class="login-bg"/>
           <img src="@/assets/images/btn.png" class="login-btn" @click="toLogin"/>
         </div>
         <img src="@/assets/images/ic_close.png" class="close-btn" @click="closeLogin"/>
       </div>
-      
     </van-overlay>
   </div>
 </template>
@@ -171,6 +170,7 @@ export default {
       url: "",
       txt: "开始",
       time: 60 * 60 * 24 * 3 * 1000,
+      isStart: false,
       timeData: {
         days: "DD",
         hours: "HH",
@@ -215,10 +215,12 @@ export default {
         this.url = res.data.url
         let newDate = new Date().getTime()
         if(newDate - res.data.middle < 0) {
+          this.isStart = false
           this.txt = "开始"
           this.time = res.data.middle - newDate
           this.timeTxt = this.format(res.data.middle, "m月d日 H时") + "开始";
         } else {
+          this.isStart = true
           this.txt = "结束"
           this.time = res.data.end - newDate
           this.timeTxt = this.format(res.data.end, "m月d日 H时") + "结束";
@@ -238,7 +240,9 @@ export default {
                 item2.tags = 2
               } else if(item2.label == "推荐") {
                 item2.tags = 3
-              } else {
+              } else if(item2.label == "冬棉约惠节") {
+                item2.tags = 4
+              }  else {
                 item2.tags = 0
               }
               if(index2 < 2) {
@@ -254,6 +258,8 @@ export default {
               item3.tags = 2
             } else if(item3.label == "推荐") {
               item3.tags = 3
+            } else if(item3.label == "冬棉约惠节") {
+              item3.tags = 4
             } else {
               item3.tags = 0
             }
@@ -276,7 +282,11 @@ export default {
     },
 
     toActivity() {
-      window.location = `${this.url}?token=${this.token}&appType=${this.appType}`
+      if (this.$route.query.appType == "Android") {
+        window.openNewWebView.OnClick(this.url);
+      } else {
+        window.location = `${this.url}?token=${this.token}&appType=${this.appType}`
+      }
     },
 
     // 刷新
@@ -384,6 +394,7 @@ export default {
   header {
     max-height: 12.3376rem;
     position: relative;
+    background-image: linear-gradient(#f9183b, #f8395c);
     .header-bg {
       width: 100%;
     }
