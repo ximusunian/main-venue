@@ -4,16 +4,16 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-23 16:52:17
+ * @LastEditTime: 2020-11-24 20:47:58
 -->
 <template>
   <div id="index">
     <header>
       <img :src="headerImg" class="header-bg" />
       <div class="countdown-title">
-        <span class="divider">——</span>
+        <span class="divider"></span>
         <p><span>距活动</span><span class="big">{{txt}}</span></p>
-        <span class="divider">——</span>
+        <span class="divider"></span>
       </div>
     </header>
     <div class="container">
@@ -89,10 +89,10 @@
       </div>
 
       <div class="main-box">
-        <van-tabs type="card" class="classification" sticky>
+        <van-tabs type="card" class="classification" sticky  @click="changeTab">
           <van-tab v-for="(item, index) in tabList" :key="index" :title="item.name">
             <div class="classification-second" v-if="item.list.length != 0">
-              <van-tabs scrollspy sticky offset-top="40px">
+              <van-tabs sticky scrollspy offset-top="1.066rem">
                 <div v-if="item.product.length != 0">
                   <titleLine style="margin-top: 0.533rem" :title="item.otherName"></titleLine>
                   <div class="classification-list-two">
@@ -103,16 +103,17 @@
                   </div>
                 </div>
 
-                <van-tab v-for="(item1, index1) in item.list" :title="item1.name" :key="index1">
-                  <titleLine style="margin-top: 0.533rem" :title="item1.otherName"></titleLine>
-                  <div class="classification-list-two">
-                    <listItemTB v-for="(items, index) in item1.two" :key="index" :type="1" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
-                  </div>
-                  <div class="classification-list-other">
-                    <listItemTB v-for="(items, index) in item1.product" :key="index" :type="3" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
-                  </div>
-                </van-tab>
-
+                <div v-if="item.list.length != 0">
+                  <van-tab v-for="(item1, index1) in item.list" :title="item1.name" :key="index1">
+                    <titleLine style="margin-top: 0.533rem" :title="item1.otherName"></titleLine>
+                    <div class="classification-list-two">
+                      <listItemTB v-for="(items, index) in item1.two" :key="index" :type="1" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
+                    </div>
+                    <div class="classification-list-other">
+                      <listItemTB v-for="(items, index) in item1.product" :key="index" :type="3" :tags="items.tags" :data="items" :timeTxt="timeTxt"></listItemTB>
+                    </div>
+                  </van-tab>
+                </div>
               </van-tabs>
             </div>
             
@@ -130,8 +131,8 @@
       </div>
     </div>
     <div class="operation">
-      <img src="@/assets/images/ic_refresh.png" class="refresh" @click="refresh"/>
-      <img src="@/assets/images/ic_topping.png" class="topping" @click="toTop"/>
+      <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/ic_refresh.png" class="refresh" @click="refresh"/>
+      <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/ic_topping.png" class="topping" @click="toTop"/>
     </div>
 
     <van-overlay :show="noLogin">
@@ -139,9 +140,9 @@
         <div class="top">
           <span class="tips">您还没有登录哦～</span>
           <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/app/8aacb6195603490da4242ae73662dcd7.png" class="login-bg"/>
-          <img src="@/assets/images/btn.png" class="login-btn" @click="toLogin"/>
+          <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/btn.png" class="login-btn" @click="toLogin"/>
         </div>
-        <img src="@/assets/images/ic_close.png" class="close-btn" @click="closeLogin"/>
+        <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/ic_close.png" class="close-btn" @click="closeLogin"/>
       </div>
     </van-overlay>
   </div>
@@ -151,7 +152,7 @@
 import titleLine from "@/components/titleLine";
 import listItemLR from "@/components/listItemLR";
 import listItemTB from "@/components/listItemTB";
-import { CountDown, Tab, Tabs, Overlay} from "vant";
+import { CountDown, Tab, Tabs, Overlay, Sticky } from "vant";
 export default {
   name: "index",
   components: {
@@ -161,7 +162,8 @@ export default {
     [CountDown.name]: CountDown,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
-    [Overlay.name]: Overlay
+    [Overlay.name]: Overlay,
+    [Sticky.name]: Sticky
   },
   data() {
     return {
@@ -306,6 +308,12 @@ export default {
       },30)
     },
 
+    changeTab() {
+      let osTop = document.documentElement.scrollTop || document.body.scrollTop;
+      document.documentElement.scrollTop = document.body.scrollTop = osTop + 5
+      document.documentElement.scrollTop = document.body.scrollTop = osTop
+    },
+
     /**
      * @name: translateTime
      * @msg: 时间处理函数
@@ -407,9 +415,16 @@ export default {
       align-items: center;
       color: #fff;
       justify-content: center;
-      p {
-        margin-left: 0.2rem;
+      .divider {
+        position: relative;
+        width: 0.7rem;
+        height: 1.8px;
+        background-color: #FFF;
+        margin-top: 0.1rem;
         margin-right: 0.2rem;
+        margin-left: 0.1rem;
+      }
+      p {
         letter-spacing: 0.1rem;
         .big {
           font-size: 0.693rem;

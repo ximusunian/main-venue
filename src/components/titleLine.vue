@@ -4,13 +4,13 @@
  * @Author: ximusunian
  * @Date: 2020-09-27 10:33:23
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-18 17:21:38
+ * @LastEditTime: 2020-11-24 20:10:03
 -->
 <template>
    <div id="titleLine">
-     <img src="@/assets/images/img_left.png" />
+     <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_left.png" />
      <span>{{title}}</span>
-     <img src="@/assets/images/img_right.png" />
+     <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_right.png" />
    </div>
 </template>
 

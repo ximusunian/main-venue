@@ -4,7 +4,7 @@
  * @Author: ximusunian
  * @Date: 2020-11-18 14:43:17
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-23 17:52:56
+ * @LastEditTime: 2020-11-24 13:21:05
  */
 const path = require("path");
 
@@ -69,8 +69,8 @@ module.exports = {
     proxy: {
       "/huitongyi": {
         // target: 'http://120.55.95.100:8100',
-        target: 'http://192.168.0.129:8100',
-        // target: 'http://116.63.46.127:8100',
+        // target: 'http://192.168.0.129:8100',
+        target: 'http://116.63.46.127:8100',
         changeOrigin: true,
         pathRewrite: {
           "^/huitongyi": "huitongyi"

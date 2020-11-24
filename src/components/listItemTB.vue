@@ -5,7 +5,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-23 18:01:42
+ * @LastEditTime: 2020-11-24 20:09:51
 -->
 <template>
   <div class="listItemTB" @click="goProductDetail(data.productCode)">
@@ -178,7 +178,6 @@ export default {
       if (ua.match(/MicroMessenger/i) == "micromessenger") {
         //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）
         wx.miniProgram.getEnv((res) => {
-          this.weChat = true;
           if (res.miniprogram) {
             wx.miniProgram.navigateTo({
               url: `/pages/goods_details/index?prodCode=${prodCode}&&classifyId=-1`,
@@ -317,7 +316,7 @@ export default {
           color: #FFF8DB;
           text-align: center;
           line-height: 0.72rem;
-          background-image: url("../assets/images/img_recommend.png");
+          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_recommend.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
         }
@@ -327,9 +326,6 @@ export default {
           left: 0.16rem;
           width: 1.106rem;
           height: 1.106rem;
-          // background-image: url("../assets/images/img_hugely_popular.png");
-          // background-repeat: no-repeat;
-          // background-size: 100% 100%;
           img {
             width: 100%;
             height: 100%;
@@ -341,9 +337,6 @@ export default {
           left: 0.16rem;
           width: 1.2rem;
           height: 0.76rem;
-          // background-image: url("../assets/images/img_activity_recommendation.png");
-          // background-repeat: no-repeat;
-          // background-size: 100% 100%;
           img {
             width: 100%;
             height: 100%;
@@ -355,7 +348,7 @@ export default {
           position: absolute;
           bottom: 0;
           display: flex;
-          background-image: url("../assets/images/img_activity_medium.png");
+          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_activity_medium.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
           color: #F9ECD2;
@@ -419,9 +412,23 @@ export default {
           box-sizing: border-box;
           -moz-box-sizing: border-box;
           -webkit-box-sizing: border-box;
-          border: 0.5px solid #FFCC7F;
+          position: relative;
+        }
+        &-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: 1px solid #FFCC7F;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          width: 200%;
+          height: 200%;
+          -webkit-transform: scale(0.5);
+          transform: scale(0.5);
+          -webkit-transform-origin: left top;
           border-top: 0;
-          border-radius: 0 0 0.2133rem 0.2133rem;
+          border-radius: 0 0 0.4266rem 0.4266rem;
         }
       }
     }
@@ -446,7 +453,7 @@ export default {
           color: #FFF8DB;
           text-align: center;
           line-height: 0.62rem;
-          background-image: url("../assets/images/img_recommend.png");
+          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_recommend.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
         }
@@ -454,9 +461,9 @@ export default {
           width: 100%;
           height: 1.253rem;
           position: absolute;
-          bottom: 0;
+          bottom: -1px;
           display: flex;
-          background-image: url("../assets/images/img_activity_small.png");
+          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_activity_small.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
           color: #F9ECD2;
@@ -467,7 +474,6 @@ export default {
             align-items: center;
             justify-content: center;
             .title {
-              // font-size: 0.266rem;
               font-size: 0.2rem;
               margin-top: 0.06rem;
             }
@@ -540,9 +546,23 @@ export default {
           box-sizing: border-box;
           -moz-box-sizing: border-box;
           -webkit-box-sizing: border-box;
-          border: 0.5px solid #FFCC7F;
+          position: relative;
+        }
+        &-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: 1px solid #FFCC7F;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          width: 200%;
+          height: 200%;
+          -webkit-transform: scale(0.5);
+          transform: scale(0.5);
+          -webkit-transform-origin: left top;
           border-top: 0;
-          border-radius: 0 0 0.2133rem 0.2133rem;
+          border-radius: 0 0 0.4266rem 0.4266rem;
         }
       }
     }
@@ -567,9 +587,6 @@ export default {
             width: 100%;
             height: 100%;
           }
-          // background-image: url("../assets/images/img_hugely_popular_small.png");
-          // background-repeat: no-repeat;
-          // background-size: 100% 100%;
         }
         &-tag2 {
           position: absolute;
@@ -581,9 +598,6 @@ export default {
             width: 100%;
             height: 100%;
           }
-          // background-image: url("../assets/images/img_activity_recommendation_small.png");
-          // background-repeat: no-repeat;
-          // background-size: 100% 100%;
         }
         .slogan-box {
           width: 100%;
@@ -591,7 +605,7 @@ export default {
           position: absolute;
           bottom: 0;
           display: flex;
-          background-image: url("../assets/images/img_activity_min.png");
+          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_activity_min.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
           color: #F9ECD2;
@@ -620,7 +634,7 @@ export default {
             justify-content: flex-end;
             align-items: center;
             font-size: 0.2rem;
-            margin-bottom: 0.02rem;
+            margin-bottom: 0.03rem;
           }
         }
       }
@@ -675,9 +689,24 @@ export default {
           box-sizing: border-box;
           -moz-box-sizing: border-box;
           -webkit-box-sizing: border-box;
-          border: 0.5px solid #FFCC7F;
+          // border: 0.5px solid #FFCC7F;
+          position: relative;
+        }
+        &-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: 1px solid #FFCC7F;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          width: 200%;
+          height: 200%;
+          -webkit-transform: scale(0.5);
+          transform: scale(0.5);
+          -webkit-transform-origin: left top;
           border-top: 0;
-          border-radius: 0 0 0.2133rem 0.2133rem;
+          border-radius: 0 0 0.4266rem 0.4266rem;
         }
       }
     }

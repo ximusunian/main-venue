@@ -5,7 +5,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-23 17:59:14
+ * @LastEditTime: 2020-11-24 20:09:01
 -->
 <template>
   <div class="listItemLR" @click="goProductDetail(data.productCode)">
@@ -14,11 +14,10 @@
         <img :src="data.pic" class="pic"/>
         <div class="rank-tag">{{data.rank}}</div>
         <div class="img-part-box" v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
-          <img src="@/assets/images/img_activity_big.png" />
+          <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_activity_big.png" />
           <div class="img-part-box-price">
             <div class="img-part-box-price-left small">
               <span class="first">{{data.theme}}</span>
-              <!-- <span class="first" v-else>活动价¥</span> -->
               <span v-if="data.price">
                 <span>{{translatePrice(data.price, 1)}}</span>
                 <span class="normal1">{{translatePrice(data.price, 2)}}</span>
@@ -47,7 +46,7 @@
         </div>
         <div class="price-part-footer">
           <span>立即抢购</span>
-          <img src="@/assets/images/ic_mallcar.png" />
+          <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/ic_mallcar.png" />
         </div>
       </div>
     </div>
@@ -72,18 +71,17 @@
         </div>
         <div class="price-part-footer">
           <span>立即抢购</span>
-          <img src="@/assets/images/ic_mallcar.png" />
+          <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/ic_mallcar.png" />
         </div>
       </div>
       <div class="img-part">
         <img :src="data.pic" class="pic"/>
         <div class="rank-tag">{{data.rank}}</div>
         <div class="img-part-box" v-show="data.themeOpen && data.themeEndTime - nowTime > 0">
-          <img src="@/assets/images/img_activity_big2.png" />
+          <img src="https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_activity_big2.png" class="images"/>
           <div class="img-part-box-price">
             <div class="img-part-box-price-left small">
               <span class="first">{{data.theme}}</span>
-              <!-- <span class="first" v-else>活动价¥</span> -->
               <span v-if="data.price">
                 <span>{{translatePrice(data.price, 1)}}</span>
                 <span class="normal1">{{translatePrice(data.price, 2)}}</span>
@@ -151,7 +149,6 @@ export default {
       if (ua.match(/MicroMessenger/i) == "micromessenger") {
         //ios的ua中无miniProgram，但都有MicroMessenger（表示是微信浏览器）
         wx.miniProgram.getEnv((res) => {
-          this.weChat = true;
           if (res.miniprogram) {
             wx.miniProgram.navigateTo({
               url: `/pages/goods_details/index?prodCode=${prodCode}&&classifyId=-1`,
@@ -266,7 +263,7 @@ export default {
         color: #FFF8DB;
         text-align: center;
         line-height: 0.8rem;
-        background-image: url("../assets/images/img_hot.png");
+        background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_hot.png");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
@@ -316,7 +313,6 @@ export default {
       width: 4.026rem;
       max-width: 4.026rem;
       height: 100%;
-      margin-left: -1px;
       &-top {
         height: 4.13rem;
         background-color: #FFF;
@@ -340,7 +336,7 @@ export default {
         &-tags {
           width: 2.426rem;
           height: 0.693rem;
-          background-image: url("../assets/images/bg_label.png");
+          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/bg_label.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
           color: #EB222E;
@@ -371,7 +367,6 @@ export default {
       &-footer {
         height: 1.2rem;
         background-color: #FE3E21;
-        border-radius: 0 0 0.213rem 0;
         color: #FFF;
         font-size: 0.426rem;
         display: flex;
@@ -380,13 +375,28 @@ export default {
         box-sizing: border-box;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
-        border: 0.5px solid #FFCC7F;
-        border-top: 0;
+        position: relative;
+        border:none;
         img {
           width: 0.586rem;
           height: 0.586rem;
           margin-left: 0.133rem;
         }
+      }
+      &-footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 1px solid #FFCC7F;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 200%;
+        height: 200%;
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        -webkit-transform-origin: left top;
+        border-radius: 0 0 0.426rem 0;
       }
     }
   }
@@ -414,7 +424,7 @@ export default {
         color: #FFF8DB;
         text-align: center;
         line-height: 0.8rem;
-        background-image: url("../assets/images/img_hot.png");
+        background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_hot.png");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
@@ -448,6 +458,20 @@ export default {
               font-size: 0.3rem;
             }
           }
+          &-left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-left: 1px solid #FFCC7F;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 200%;
+            height: 200%;
+            -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+            -webkit-transform-origin: left top;
+          }
           &-right {
             width: 60%;
             display: flex;
@@ -464,7 +488,6 @@ export default {
       width: 4.026rem;
       max-width: 4.026rem;
       height: 100%;
-      margin-left: -1px;
       &-top {
         height: 4.13rem;
         background-color: #FFF;
@@ -488,7 +511,7 @@ export default {
         &-tags {
           width: 2.426rem;
           height: 0.693rem;
-          background-image: url("../assets/images/bg_label.png");
+          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/bg_label.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
           color: #EB222E;
@@ -519,7 +542,6 @@ export default {
       &-footer {
         height: 1.2rem;
         background-color: #FE3E21;
-        border-radius: 0 0 0 0.213rem;
         color: #FFF;
         font-size: 0.426rem;
         display: flex;
@@ -528,13 +550,29 @@ export default {
         box-sizing: border-box;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
-        border: 0.5px solid #FFCC7F;
-        border-top: 0;
+        position: relative;
+        border:none;
         img {
           width: 0.586rem;
           height: 0.586rem;
           margin-left: 0.133rem;
         }
+      }
+      &-footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 1px solid #FFCC7F;
+        border-right: none;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 200%;
+        height: 200%;
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        -webkit-transform-origin: left top;
+        border-radius: 0 0 0 0.426rem;
       }
     }
   }
