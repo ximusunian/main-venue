@@ -5,7 +5,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-24 20:09:51
+ * @LastEditTime: 2020-11-27 14:59:30
 -->
 <template>
   <div class="listItemTB" @click="goProductDetail(data.productCode)">
@@ -51,7 +51,11 @@
             </span>
             <span class="num" v-else>{{data.oriPrice}}</span>
           </div>
-          <div class="slogan-box-r">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</div>
+          <!-- <div class="slogan-box-r">{{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}}</div> -->
+          <div class="slogan-box-r">
+            <span>{{substring(translateTime(data.themeStartTime, data.themeEndTime,that,data.themeOpen), 1)}}</span>
+            <span>{{substring(translateTime(data.themeStartTime, data.themeEndTime,that,data.themeOpen), 2)}}</span>
+          </div>
         </div>
       </div>
       <div class="three-col-bottom">
@@ -91,7 +95,6 @@
             <span class="num" v-else>{{data.oriPrice}}</span>
           </div>
           <div class="slogan-box-r">
-            <!-- {{data.themeStartTime | startTime(data.themeEndTime,that,data.themeOpen)}} -->
             <span>{{substring(translateTime(data.themeStartTime, data.themeEndTime,that,data.themeOpen), 1)}}</span>
             <span>{{substring(translateTime(data.themeStartTime, data.themeEndTime,that,data.themeOpen), 2)}}</span>
           </div>
@@ -461,20 +464,20 @@ export default {
           width: 100%;
           height: 1.253rem;
           position: absolute;
-          bottom: -1px;
+          bottom: 0;
           display: flex;
-          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_activity_small.png");
+          background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/img_activity_min.png");
           background-repeat: no-repeat;
           background-size: 100% 100%;
           color: #F9ECD2;
           &-l {
-            width: 38%;
+            width: 43%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             .title {
-              font-size: 0.2rem;
+              font-size: 0.24rem;
               margin-top: 0.06rem;
             }
             .num {
@@ -485,13 +488,14 @@ export default {
             }
           }
           &-r {
-            width: 62%;
+            width: 48%;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             align-items: center;
             font-size: 0.2rem;
-            margin-bottom: 0.03rem;
+            margin-bottom: 0.035rem;
+            margin-left: 9%;
           }
         }
       }
@@ -616,7 +620,6 @@ export default {
             align-items: center;
             justify-content: center;
             .title {
-              // font-size: 0.266rem;
               font-size: 0.24rem;
               margin-top: 0.06rem;
             }
@@ -628,13 +631,14 @@ export default {
             }
           }
           &-r {
-            width: 57%;
+            width: 48%;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             align-items: center;
             font-size: 0.2rem;
-            margin-bottom: 0.03rem;
+            margin-bottom: 0.035rem;
+            margin-left: 9%;
           }
         }
       }
@@ -656,7 +660,7 @@ export default {
             -webkit-box-orient: vertical;
           }
           &-price {
-            margin-top: -0.3rem;
+            margin-top: -0.15rem;
             .new {
               height: 100%;
               color: #F72A4E;

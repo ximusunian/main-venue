@@ -5,7 +5,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-24 20:09:01
+ * @LastEditTime: 2020-11-27 14:50:39
 -->
 <template>
   <div class="listItemLR" @click="goProductDetail(data.productCode)">
@@ -304,7 +304,7 @@ export default {
             align-items: flex-end;
             color: #F9ECD2;
             font-size: 0.32rem;
-            margin-bottom: 0.18rem;
+            margin-bottom: 0.15rem;
           }
         }
       }
@@ -334,6 +334,9 @@ export default {
           -webkit-box-orient: vertical;
         }
         &-tags {
+          display: flex;
+          justify-content: center;
+          align-items: center;
           width: 2.426rem;
           height: 0.693rem;
           background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/bg_label.png");
@@ -341,9 +344,9 @@ export default {
           background-size: 100% 100%;
           color: #EB222E;
           font-size: 0.373rem;
-          text-align: center;
-          line-height: 0.693rem;
+          font-weight: 900;
           margin-top: 0.413rem;
+          padding-bottom: 0.05rem;
         }
         &-price {
           margin-top: 0.3rem;
@@ -479,7 +482,7 @@ export default {
             align-items: flex-end;
             color: #F9ECD2;
             font-size: 0.32rem;
-            margin-bottom: 0.18rem;
+            margin-bottom: 0.15rem;
           }
         }
       }
@@ -509,6 +512,9 @@ export default {
           -webkit-box-orient: vertical;
         }
         &-tags {
+          display: flex;
+          justify-content: center;
+          align-items: center;
           width: 2.426rem;
           height: 0.693rem;
           background-image: url("https://huitongyi-mall.oss-cn-hangzhou.aliyuncs.com/h5/images/bg_label.png");
@@ -516,9 +522,9 @@ export default {
           background-size: 100% 100%;
           color: #EB222E;
           font-size: 0.373rem;
-          text-align: center;
-          line-height: 0.693rem;
+          font-weight: 900;
           margin-top: 0.413rem;
+          padding-bottom: 0.05rem;
         }
         &-price {
           margin-top: 0.3rem;

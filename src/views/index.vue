@@ -4,7 +4,7 @@
  * @Author: ximusunian
  * @Date: 2020-09-09 11:31:36
  * @LastEditors: ximusunian
- * @LastEditTime: 2020-11-24 20:47:58
+ * @LastEditTime: 2020-11-27 15:13:06
 -->
 <template>
   <div id="index">
@@ -525,21 +525,28 @@ export default {
           max-width: 4.12rem;
           margin-left: 0.4rem;
           color: #fff;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           .title {
             font-size: 0.586rem;
             margin-top: 0.653rem;
+            padding-right: 0.3rem;
           }
           .desc {
             font-size: 0.373rem;
             margin-top: 0.08rem;
+            text-align: left;
           }
           .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 2.633rem;
             height: 0.746rem;
             font-size: 0.4rem;
             color: #ea0f3b;
-            text-align: center;
-            line-height: 0.746rem;
+            font-weight: 800;
             border-radius: 0.746rem;
             background-image: linear-gradient(to right, #fef6d1, #ffd08d);
             margin-top: 0.32rem;
